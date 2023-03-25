@@ -1,15 +1,12 @@
 /**
  * @format
  */
+import { AppRegistry } from 'react-native';
+import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { RecoilRoot } from 'recoil';
 
-import {AppRegistry} from 'react-native';
-import {RecoilRoot} from 'recoil';
-import {
-  MD3LightTheme as DefaultTheme,
-  Provider as PaperProvider,
-} from 'react-native-paper';
+import { name as appName } from './app.json';
 import App from './src/App';
-import {name as appName} from './app.json';
 
 const theme = {
   ...DefaultTheme,

@@ -1,7 +1,6 @@
 /**
  * @format
  */
-
 import React from 'react';
 
 import LoadingScreen from './common/screens/LoadingScreen';

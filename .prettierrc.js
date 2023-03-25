@@ -1,7 +1,12 @@
 module.exports = {
-  arrowParens: 'avoid',
-  bracketSameLine: true,
-  bracketSpacing: false,
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
+  printWidth: 120,
+  tabWidth: 2,
+  useTabs: false,
   singleQuote: true,
-  trailingComma: 'all',
+  semi: true,
+  importOrder: ['^[./]'],
+  importOrderParserPlugins: ['typescript', 'jsx', 'classProperties', 'decorators-legacy'],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 };
