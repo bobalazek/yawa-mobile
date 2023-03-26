@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, Title } from 'react-native-paper';
 
 import { useAppDispatch } from '../../../common/hooks';
-import { register } from '../../state/authState';
+import { register } from '../../state/authReducer';
 
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +15,7 @@ const RegisterScreen = () => {
     <View style={styles.container}>
       <Title style={styles.title}>YAWA</Title>
       <Title style={styles.subtitle}>Sign up</Title>
-      <TextInput label="First Name" value={firstName} onChangeText={setFirstName} style={styles.input} />
+      <TextInput label="First name" value={firstName} onChangeText={setFirstName} style={styles.input} />
       <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
       <TextInput label="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
       <Button

@@ -1,11 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-import authSlice from '../auth/state/authState';
+import authReducer from '../auth/state/authReducer';
 import { NODE_ENV } from './constants';
+import networkReducer from './state/networkReducer';
 
 const reducer = combineReducers({
-  auth: authSlice,
+  auth: authReducer,
+  network: networkReducer,
 });
 
 const storeThunkExtraArgument = {

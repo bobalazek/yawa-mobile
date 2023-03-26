@@ -4,7 +4,7 @@ import { API_URL, AUTHORIZATION_HEADER_NAME } from '../../common/constants';
 import { UserInterface } from '../../common/types/UserInterface';
 
 class AuthService {
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<string> {
     try {
       const response = await axios.post<{ token: string }>(
         `${API_URL}/api/v1/auth/login`,
@@ -27,7 +27,7 @@ class AuthService {
     }
   }
 
-  async register(firstName: string, email: string, password: string) {
+  async register(firstName: string, email: string, password: string): Promise<string> {
     try {
       const response = await axios.post<{ token: string }>(
         `${API_URL}/api/v1/auth/register`,
@@ -45,6 +45,23 @@ class AuthService {
       );
 
       return response.data.token;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      throw new Error(err.response.data.error);
+    }
+  }
+
+  async logout(accessToken: string): Promise<string> {
+    try {
+      const response = await axios.post<{ message: string }>(`${API_URL}/api/v1/auth/register`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          [AUTHORIZATION_HEADER_NAME]: accessToken,
+        },
+      });
+
+      return response.data.message;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw new Error(err.response.data.error);
