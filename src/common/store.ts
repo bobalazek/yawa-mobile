@@ -1,10 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { useDispatch } from 'react-redux';
 
-import authSlice from '../auth/state/authSlice';
+import authSlice from '../auth/state/authState';
+import { NODE_ENV } from './constants';
 
-const rootReducer = combineReducers({
+const reducer = combineReducers({
   auth: authSlice,
 });
 
@@ -13,7 +13,8 @@ const storeThunkExtraArgument = {
 };
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer,
+  devTools: NODE_ENV === 'development',
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       thunk: {
@@ -26,7 +27,5 @@ export const store = configureStore({
 export type StoreExtra = typeof storeThunkExtraArgument;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-export const useAppDispatch: () => AppDispatch = useDispatch;
 
 export default store;

@@ -51,7 +51,6 @@ export const login = createAsyncThunk<UserInterface | null, { email: string; pas
       });
 
       return user;
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       extra.showToast({
@@ -64,6 +63,40 @@ export const login = createAsyncThunk<UserInterface | null, { email: string; pas
     }
   }
 );
+
+export const register = createAsyncThunk<
+  UserInterface | null,
+  { firstName: string; email: string; password: string },
+  { extra: StoreExtra }
+>('auth/register', async ({ firstName, email, password }, { dispatch, rejectWithValue, extra }) => {
+  try {
+    const accessToken = await authService.register(firstName, email, password);
+
+    dispatch(setAccessToken(accessToken));
+
+    const user = await authService.getProfile(accessToken);
+    if (user) {
+      dispatch(setUser(user));
+    }
+
+    extra.showToast({
+      type: 'success',
+      text1: 'Login',
+      text2: 'You have successfully logged in',
+    });
+
+    return user;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    extra.showToast({
+      type: 'error',
+      text1: 'Error',
+      text2: err.message,
+    });
+
+    return rejectWithValue(err.message);
+  }
+});
 
 export const { setAccessToken, setUser, logout } = authSlice.actions;
 

@@ -10,5 +10,6 @@ module.exports = {
   rules: {
     'prettier/prettier': 'off',
     'react/react-in-jsx-scope': 'off',
+    'comma-dangle': 'off',
   },
 };

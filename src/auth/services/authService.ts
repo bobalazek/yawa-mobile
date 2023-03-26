@@ -20,18 +20,11 @@ class AuthService {
         }
       );
 
-      const accessToken = response.data.token;
-
-      return accessToken;
-
+      return response.data.token;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw new Error(err.response.data.error);
     }
-  }
-
-  async logout() {
-    // TODO
   }
 
   async register(firstName: string, email: string, password: string) {
@@ -51,10 +44,7 @@ class AuthService {
         }
       );
 
-      const accessToken = response.data.token;
-
-      return accessToken;
-
+      return response.data.token;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw new Error(err.response.data.error);
@@ -72,7 +62,6 @@ class AuthService {
       });
 
       return response.data;
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return null;

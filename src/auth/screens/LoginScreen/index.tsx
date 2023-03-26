@@ -4,9 +4,9 @@ import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, Title } from 'react-native-paper';
 
 import { WEB_URL } from '../../../common/constants';
-import { useAppDispatch } from '../../../common/store';
+import { useAppDispatch } from '../../../common/hooks';
 import { AuthStackParams } from '../../navigators/AuthNavigator';
-import { login } from '../../state/authSlice';
+import { login } from '../../state/authState';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
@@ -15,17 +15,19 @@ const LoginScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onLoginPress = () => {
-    dispatch(login({ email, password }));
-  };
-
   return (
     <View style={styles.container}>
       <Title style={styles.title}>Welcome to YAWA</Title>
       <Title style={styles.subtitle}>Login</Title>
       <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
       <TextInput label="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button mode="contained" onPress={onLoginPress} style={styles.button}>
+      <Button
+        mode="contained"
+        onPress={() => {
+          dispatch(login({ email, password }));
+        }}
+        style={styles.button}
+      >
         Login
       </Button>
       <Text

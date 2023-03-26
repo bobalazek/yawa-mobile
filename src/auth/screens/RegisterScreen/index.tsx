@@ -1,34 +1,15 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, Title } from 'react-native-paper';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-import authService from '../../services/authService';
+import { useAppDispatch } from '../../../common/hooks';
+import { register } from '../../state/authState';
 
 const RegisterScreen = () => {
+  const dispatch = useAppDispatch();
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const onRegisterPress = async () => {
-    try {
-      await authService.register(firstName, email, password);
-
-      Toast.show({
-        type: 'success',
-        text1: 'Login',
-        text2: 'You have successfully signed up',
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: err.message,
-      });
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -37,7 +18,13 @@ const RegisterScreen = () => {
       <TextInput label="First Name" value={firstName} onChangeText={setFirstName} style={styles.input} />
       <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
       <TextInput label="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button mode="contained" onPress={onRegisterPress} style={styles.button}>
+      <Button
+        mode="contained"
+        onPress={() => {
+          dispatch(register({ firstName, email, password }));
+        }}
+        style={styles.button}
+      >
         Sign up
       </Button>
     </View>
