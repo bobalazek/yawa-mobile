@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { RootState } from '../../common/store';
+import { RootState } from '../store';
 
 interface NetworkState {
   isConnected: boolean;

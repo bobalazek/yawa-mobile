@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { API_URL, AUTHORIZATION_HEADER_NAME } from '../../common/constants';
-import { UserInterface } from '../../common/types/UserInterface';
+import { API_URL, AUTHORIZATION_HEADER_NAME } from '../../../constants';
+import { UserInterface } from '../../../types/UserInterface';
 
 class AuthService {
   async login(email: string, password: string): Promise<string> {

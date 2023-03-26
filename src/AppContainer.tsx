@@ -3,7 +3,7 @@ import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from 'react-
 import { Provider as ReduxProvider } from 'react-redux';
 
 import App from './App';
-import store from './common/store';
+import store from './store';
 
 export default function AppContainer() {
   return (

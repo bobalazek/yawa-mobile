@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-import authReducer from '../auth/state/authReducer';
 import { NODE_ENV } from './constants';
+import authReducer from './features/auth/state/authReducer';
 import networkReducer from './state/networkReducer';
 
 const reducer = combineReducers({

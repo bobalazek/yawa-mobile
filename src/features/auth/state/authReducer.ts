@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { RootState, StoreExtra } from '../../common/store';
-import { UserInterface } from '../../common/types/UserInterface';
+import { RootState, StoreExtra } from '../../../store';
+import { UserInterface } from '../../../types/UserInterface';
 import authService from '../services/authService';
 
 interface AuthState {

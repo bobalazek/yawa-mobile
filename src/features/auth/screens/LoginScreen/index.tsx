@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, Title } from 'react-native-paper';
 
-import { WEB_URL } from '../../../common/constants';
-import { useAppDispatch } from '../../../common/hooks';
+import { WEB_URL } from '../../../../constants';
+import { useAppDispatch } from '../../../../hooks';
 import { AuthStackParams } from '../../navigators/AuthNavigator';
 import { login } from '../../state/authReducer';
 

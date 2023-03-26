@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput, Title } from 'react-native-paper';
 
-import { useAppDispatch } from '../../../common/hooks';
+import { useAppDispatch } from '../../../../hooks';
 import { register } from '../../state/authReducer';
 
 const RegisterScreen = () => {
