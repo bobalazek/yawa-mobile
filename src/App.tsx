@@ -1,18 +1,17 @@
 /**
  * @format
  */
-import React from 'react';
 import Toast from 'react-native-toast-message';
 
-import LoginScreen from './auth/screens/LoginScreen';
+import AuthNavigationStack from './auth/navigation/AuthNavigationStack';
 
-function App(): JSX.Element {
+const App = () => {
   return (
     <>
-      <LoginScreen />
+      <AuthNavigationStack />
       <Toast />
     </>
   );
-}
+};
 
 export default App;
