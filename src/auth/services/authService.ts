@@ -1,10 +1,7 @@
 import axios from 'axios';
-import { snapshot_UNSTABLE } from 'recoil';
 
-import { API_URL } from '../../common/constants';
+import { API_URL, AUTHORIZATION_HEADER_NAME } from '../../common/constants';
 import { UserInterface } from '../../common/types/UserInterface';
-import { authAccessTokenState } from '../state/authAccessTokenState';
-import { authUserState } from '../state/authUserState';
 
 class AuthService {
   async login(email: string, password: string) {
@@ -23,11 +20,10 @@ class AuthService {
         }
       );
 
-      snapshot_UNSTABLE(async ({ set }) => {
-        set(authAccessTokenState, response.data.token);
-      });
+      const accessToken = response.data.token;
 
-      return response.data.token;
+      return accessToken;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw new Error(err.response.data.error);
@@ -35,14 +31,12 @@ class AuthService {
   }
 
   async logout() {
-    snapshot_UNSTABLE(async ({ set }) => {
-      set(authAccessTokenState, null);
-    });
+    // TODO
   }
 
   async register(firstName: string, email: string, password: string) {
     try {
-      const response = await axios.post<UserInterface>(
+      const response = await axios.post<{ token: string }>(
         `${API_URL}/api/v1/auth/register`,
         {
           firstName,
@@ -57,14 +51,31 @@ class AuthService {
         }
       );
 
-      snapshot_UNSTABLE(async ({ set }) => {
-        set(authUserState, response.data);
-      });
+      const accessToken = response.data.token;
 
-      return response.data;
+      return accessToken;
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       throw new Error(err.response.data.error);
+    }
+  }
+
+  async getProfile(accessToken: string): Promise<UserInterface | null> {
+    try {
+      const response = await axios.get<UserInterface>(`${API_URL}/api/v1/auth/profile`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json;charset=UTF-8',
+          [AUTHORIZATION_HEADER_NAME]: accessToken,
+        },
+      });
+
+      return response.data;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return null;
     }
   }
 }

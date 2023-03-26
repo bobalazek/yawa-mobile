@@ -1,36 +1,22 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, Title } from 'react-native-paper';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-import { AuthStackParams } from '../../navigation/AuthNavigationStack';
-import authService from '../../services/authService';
+import { WEB_URL } from '../../../common/constants';
+import { useAppDispatch } from '../../../common/store';
+import { AuthStackParams } from '../../navigators/AuthNavigator';
+import { login } from '../../state/authSlice';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
 
 const LoginScreen = ({ navigation }: Props) => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onLoginPress = async () => {
-    try {
-      await authService.login(email, password);
-
-      Toast.show({
-        type: 'success',
-        text1: 'Login',
-        text2: 'You have successfully logged in',
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: err.message,
-      });
-    }
+  const onLoginPress = () => {
+    dispatch(login({ email, password }));
   };
 
   return (
@@ -42,7 +28,14 @@ const LoginScreen = ({ navigation }: Props) => {
       <Button mode="contained" onPress={onLoginPress} style={styles.button}>
         Login
       </Button>
-      <Text style={styles.forgotenPasswordText}>Forgot password?</Text>
+      <Text
+        style={styles.forgotenPasswordText}
+        onPress={async () => {
+          await Linking.openURL(`${WEB_URL}/auth/password-reset`);
+        }}
+      >
+        Forgot password?
+      </Text>
       <Text style={styles.noAccountYetText}>No account yet?</Text>
       <Button
         mode="contained"
@@ -51,7 +44,7 @@ const LoginScreen = ({ navigation }: Props) => {
           navigation.navigate('Register');
         }}
       >
-        Register
+        Sign up
       </Button>
     </View>
   );
@@ -82,6 +75,7 @@ const styles = StyleSheet.create({
   forgotenPasswordText: {
     marginTop: 30,
     color: 'blue',
+    alignSelf: 'flex-start',
   },
   noAccountYetText: {
     marginTop: 30,
