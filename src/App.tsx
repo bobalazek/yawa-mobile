@@ -4,7 +4,7 @@ import Toast from 'react-native-toast-message';
 
 import AuthNavigator from './features/auth/navigators/AuthNavigator';
 import { isAuthenticatedSelector } from './features/auth/state/authReducer';
-import DashboardNavigator from './features/dashboard/navigators/DashboardNavigator';
+import HomeNavigator from './features/home/navigators/HomeNavigator';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setConnectionType, setIsConnected } from './state/networkReducer';
 
@@ -31,7 +31,7 @@ const App = () => {
 
   return (
     <>
-      {isAuthenticated ? <DashboardNavigator /> : <AuthNavigator />}
+      {isAuthenticated ? <HomeNavigator /> : <AuthNavigator />}
       <Toast />
     </>
   );
