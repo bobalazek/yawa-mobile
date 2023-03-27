@@ -3,9 +3,8 @@ import * as Keychain from 'react-native-keychain';
 
 import { KEYCHAIN_USERNAME_KEY } from '../../../constants';
 import { RootState, StoreExtra } from '../../../store';
-import { UserInterface } from '../../../types/UserInterface';
 import authService from '../services/authService';
-import { setAccessToken, setUser } from './authReducer';
+import { refreshUser, setAccessToken } from './authReducer';
 
 interface AuthRegisterState {
   isLoading: boolean;
@@ -26,7 +25,7 @@ const slice = createSlice({
 });
 
 export const register = createAsyncThunk<
-  UserInterface | null,
+  undefined,
   { firstName: string; email: string; password: string },
   { extra: StoreExtra }
 >('authRegister/register', async ({ firstName, email, password }, { dispatch, rejectWithValue, extra }) => {
@@ -38,19 +37,13 @@ export const register = createAsyncThunk<
     await Keychain.setGenericPassword(KEYCHAIN_USERNAME_KEY, accessToken);
 
     dispatch(setAccessToken(accessToken));
-
-    const user = await authService.getProfile(accessToken);
-    if (user) {
-      dispatch(setUser(user));
-    }
+    await dispatch(refreshUser());
 
     extra.showToast({
       type: 'success',
       text1: 'Login',
       text2: 'You have successfully logged in',
     });
-
-    return user;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     extra.showToast({
