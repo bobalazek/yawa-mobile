@@ -43,11 +43,7 @@ export const init = createAsyncThunk<void, void, { extra: StoreExtra }>(
       const accessToken = credentials ? credentials.password : null;
       if (accessToken) {
         dispatch(setAccessToken(accessToken));
-
-        const user = await authService.getProfile(accessToken);
-        if (user) {
-          dispatch(setUser(user));
-        }
+        await dispatch(refreshUser());
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
