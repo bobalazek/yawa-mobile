@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
-const LoadingScreen = () => {
+const SplashScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Loading</Text>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingScreen;
+export default SplashScreen;

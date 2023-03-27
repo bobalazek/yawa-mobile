@@ -5,10 +5,11 @@ import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'reac
 
 import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
-import { isAuthenticatedSelector } from './features/auth/state/authReducer';
+import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
 import DashboardScreen from './features/dashboard/screens/DashboardScreen';
 import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
+import SplashScreen from './screens/SplashScreen';
 import { setConnectionType, setIsConnected } from './state/networkReducer';
 
 // Very confusing that the number of lines needs to be set
@@ -29,9 +30,12 @@ export const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const App = () => {
   const dispatch = useAppDispatch();
+  const isReady = useAppSelector(isReadySelector);
   const isAuthenticated = useAppSelector(isAuthenticatedSelector);
 
   useEffect(() => {
+    dispatch(init());
+
     (async () => {
       const state = await NetInfo.fetch();
       dispatch(setIsConnected(!!state.isConnected));
@@ -47,6 +51,10 @@ const App = () => {
       unsubscribe();
     };
   }, [dispatch]);
+
+  if (!isReady) {
+    return <SplashScreen />;
+  }
 
   return (
     <>

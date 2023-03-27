@@ -1,10 +1,14 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { Appbar, Text } from 'react-native-paper';
 
+import { RootStackParams } from '../../../../App';
 import { useAppSelector } from '../../../../hooks';
 import { userSelector } from '../../../auth/state/authReducer';
 
-const DashboardScreen = () => {
+type Props = NativeStackScreenProps<RootStackParams, 'Dashboard'>;
+
+const DashboardScreen = ({ navigation }: Props) => {
   const user = useAppSelector(userSelector);
 
   return (
@@ -17,8 +21,18 @@ const DashboardScreen = () => {
             </Text>
           }
         />
-        <Appbar.Action icon="bell" onPress={() => console.log('Pressed notification icon')} />
-        <Appbar.Action icon="cog" onPress={() => console.log('Pressed settings icon')} />
+        <Appbar.Action
+          icon="bell"
+          onPress={() => {
+            navigation.navigate('Notifications');
+          }}
+        />
+        <Appbar.Action
+          icon="cog"
+          onPress={() => {
+            navigation.navigate('Settings');
+          }}
+        />
       </Appbar.Header>
     </View>
   );
