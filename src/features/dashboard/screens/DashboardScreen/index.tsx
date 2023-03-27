@@ -13,11 +13,11 @@ const DashboardScreen = ({ navigation }: Props) => {
 
   return (
     <View>
-      <Appbar.Header style={styles.appbar}>
+      <Appbar.Header style={styles.appbarHeader}>
         <Appbar.Content
           title={
-            <Text style={styles.appbarTitle}>
-              Hello <Text style={styles.appbarTitleName}>{user?.firstName}</Text>
+            <Text style={styles.appbarContentTitle}>
+              Hello <Text style={styles.appbarContentTitleName}>{user?.firstName}</Text>
             </Text>
           }
         />
@@ -39,13 +39,13 @@ const DashboardScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  appbar: {
-    backgroundColor: '#fff',
+  appbarHeader: {
+    backgroundColor: '#ffffff',
   },
-  appbarTitle: {
+  appbarContentTitle: {
     fontSize: 16,
   },
-  appbarTitleName: {
+  appbarContentTitleName: {
     fontWeight: 'bold',
   },
 });

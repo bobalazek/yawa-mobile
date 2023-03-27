@@ -43,8 +43,8 @@ const authSlice = createSlice({
   },
 });
 
-export const init = createAsyncThunk<void, undefined, { extra: StoreExtra }>(
-  'auth/init',
+export const init = createAsyncThunk<void, void, { extra: StoreExtra }>(
+  'auth/refreshUser',
   async (_, { dispatch, rejectWithValue, extra }) => {
     try {
       dispatch(setIsReady(false));

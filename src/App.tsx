@@ -7,6 +7,8 @@ import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
 import DashboardScreen from './features/dashboard/screens/DashboardScreen';
+import NotificationsScreen from './features/notifications/screens/NotificationsScreen';
+import ProfileSettingsScreen from './features/settings/screens/ProfileSettingsScreen';
 import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
 import SplashScreen from './screens/SplashScreen';
@@ -24,6 +26,8 @@ export type RootStackParams = {
   Register: undefined;
   Dashboard: undefined;
   Settings: undefined;
+  ProfileSettings: undefined;
+  Notifications: undefined;
 };
 
 export const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -63,6 +67,12 @@ const App = () => {
           <RootStack.Group>
             <RootStack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="Settings" component={SettingsScreen} />
+            <RootStack.Screen
+              name="ProfileSettings"
+              component={ProfileSettingsScreen}
+              options={{ title: 'Profile settings' }}
+            />
+            <RootStack.Screen name="Notifications" component={NotificationsScreen} />
           </RootStack.Group>
         ) : (
           <RootStack.Group screenOptions={{ headerShown: false }}>
