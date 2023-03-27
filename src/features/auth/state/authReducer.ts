@@ -65,7 +65,7 @@ export const init = createAsyncThunk<void, void, { extra: StoreExtra }>(
 );
 
 export const refreshUser = createAsyncThunk<void, void, { extra: StoreExtra }>(
-  'auth/init',
+  'auth/refreshUser',
   async (_, { dispatch, rejectWithValue, getState, extra }) => {
     try {
       const state = getState() as RootState;

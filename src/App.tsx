@@ -8,6 +8,7 @@ import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
 import DashboardScreen from './features/dashboard/screens/DashboardScreen';
 import NotificationsScreen from './features/notifications/screens/NotificationsScreen';
+import PasswordSettingsScreen from './features/settings/screens/PasswordSettingsScreen';
 import ProfileSettingsScreen from './features/settings/screens/ProfileSettingsScreen';
 import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -27,6 +28,7 @@ export type RootStackParams = {
   Dashboard: undefined;
   Settings: undefined;
   ProfileSettings: undefined;
+  PasswordSettings: undefined;
   Notifications: undefined;
 };
 
@@ -71,6 +73,11 @@ const App = () => {
               name="ProfileSettings"
               component={ProfileSettingsScreen}
               options={{ title: 'Profile settings' }}
+            />
+            <RootStack.Screen
+              name="PasswordSettings"
+              component={PasswordSettingsScreen}
+              options={{ title: 'Password settings' }}
             />
             <RootStack.Screen name="Notifications" component={NotificationsScreen} />
           </RootStack.Group>

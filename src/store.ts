@@ -5,12 +5,16 @@ import { NODE_ENV } from './constants';
 import authLoginReducer from './features/auth/state/authLoginReducer';
 import authReducer from './features/auth/state/authReducer';
 import authRegisterReducer from './features/auth/state/authRegisterReducer';
+import settingsPasswordReducer from './features/settings/state/settingsPasswordReducer';
+import settingsProfileReducer from './features/settings/state/settingsProfileReducer';
 import networkReducer from './state/networkReducer';
 
 const reducer = combineReducers({
   auth: authReducer,
   authLogin: authLoginReducer,
   authRegister: authRegisterReducer,
+  settingsPassword: settingsPasswordReducer,
+  settingsProfile: settingsProfileReducer,
   network: networkReducer,
 });
 

@@ -24,7 +24,12 @@ const SettingsScreen = ({ navigation }: Props) => {
             navigation.navigate('ProfileSettings');
           }}
         />
-        <List.Item title="Change password" />
+        <List.Item
+          title="Change password"
+          onPress={() => {
+            navigation.navigate('PasswordSettings');
+          }}
+        />
       </List.Section>
       <Divider />
       <List.Section>
