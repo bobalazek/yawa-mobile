@@ -1,15 +1,22 @@
 import NetInfo from '@react-native-community/netinfo';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
-import Toast from 'react-native-toast-message';
+import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'react-native-toast-message';
 
 import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { isAuthenticatedSelector } from './features/auth/state/authReducer';
-import DashboardScreen from './features/home/screens/DashboardScreen';
+import DashboardScreen from './features/dashboard/screens/DashboardScreen';
 import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setConnectionType, setIsConnected } from './state/networkReducer';
+
+// Very confusing that the number of lines needs to be set
+const toastConfig = {
+  success: (props: BaseToastProps) => <SuccessToast {...props} text2NumberOfLines={3} />,
+  error: (props: BaseToastProps) => <ErrorToast {...props} text2NumberOfLines={3} />,
+  info: (props: BaseToastProps) => <InfoToast {...props} text2NumberOfLines={3} />,
+};
 
 export type RootStackParams = {
   Login: undefined;
@@ -46,7 +53,7 @@ const App = () => {
       <RootStack.Navigator>
         {isAuthenticated ? (
           <RootStack.Group>
-            <RootStack.Screen name="Dashboard" component={DashboardScreen} />
+            <RootStack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="Settings" component={SettingsScreen} />
           </RootStack.Group>
         ) : (
@@ -56,7 +63,7 @@ const App = () => {
           </RootStack.Group>
         )}
       </RootStack.Navigator>
-      <Toast />
+      <Toast config={toastConfig} />
     </>
   );
 };
