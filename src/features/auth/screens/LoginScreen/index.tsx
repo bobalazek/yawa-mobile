@@ -3,17 +3,18 @@ import { useState } from 'react';
 import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, Title } from 'react-native-paper';
 
+import { RootStackParams } from '../../../../App';
 import { WEB_URL } from '../../../../constants';
-import { useAppDispatch } from '../../../../hooks';
-import { AuthStackParams } from '../../navigators/AuthNavigator';
-import { login } from '../../state/authReducer';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { isLoginLoadingSelector, login } from '../../state/authReducer';
 
-type Props = NativeStackScreenProps<AuthStackParams, 'Login'>;
+type Props = NativeStackScreenProps<RootStackParams, 'Login'>;
 
 const LoginScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const isLoginLoading = useAppSelector(isLoginLoadingSelector);
 
   return (
     <View style={styles.container}>
@@ -27,6 +28,8 @@ const LoginScreen = ({ navigation }: Props) => {
           dispatch(login({ email, password }));
         }}
         style={styles.button}
+        loading={isLoginLoading}
+        disabled={isLoginLoading}
       >
         Login
       </Button>

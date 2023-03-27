@@ -7,11 +7,15 @@ import authService from '../services/authService';
 interface AuthState {
   accessToken: string | null;
   user: UserInterface | null;
+  isLoginLoading: boolean;
+  isRegisterLoading: boolean;
 }
 
 const initialState: AuthState = {
   accessToken: null,
   user: null,
+  isLoginLoading: false,
+  isRegisterLoading: false,
 };
 
 const authSlice = createSlice({
@@ -24,6 +28,29 @@ const authSlice = createSlice({
     setUser: (state, action: PayloadAction<UserInterface | null>) => {
       state.user = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        state.isLoginLoading = true;
+      })
+      .addCase(login.fulfilled, (state) => {
+        state.isLoginLoading = false;
+      })
+      .addCase(login.rejected, (state) => {
+        state.isLoginLoading = false;
+      });
+
+    builder
+      .addCase(register.pending, (state) => {
+        state.isRegisterLoading = true;
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.isRegisterLoading = false;
+      })
+      .addCase(register.rejected, (state) => {
+        state.isRegisterLoading = false;
+      });
   },
 });
 
@@ -132,6 +159,8 @@ export const register = createAsyncThunk<
 export const { setAccessToken, setUser } = authSlice.actions;
 
 export const isAuthenticatedSelector = (state: RootState) => !!state.auth.user;
+export const isLoginLoadingSelector = (state: RootState) => !!state.auth.isLoginLoading;
+export const isRegisterLoadingSelector = (state: RootState) => !!state.auth.isRegisterLoading;
 export const userSelector = (state: RootState) => state.auth.user;
 
 export default authSlice.reducer;

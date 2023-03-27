@@ -1,15 +1,20 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput, Title } from 'react-native-paper';
+import { Button, Text, TextInput, Title } from 'react-native-paper';
 
-import { useAppDispatch } from '../../../../hooks';
-import { register } from '../../state/authReducer';
+import { RootStackParams } from '../../../../App';
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { isRegisterLoadingSelector, register } from '../../state/authReducer';
 
-const RegisterScreen = () => {
+type Props = NativeStackScreenProps<RootStackParams, 'Register'>;
+
+const RegisterScreen = ({ navigation }: Props) => {
   const dispatch = useAppDispatch();
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const isRegisterLoading = useAppSelector(isRegisterLoadingSelector);
 
   return (
     <View style={styles.container}>
@@ -24,8 +29,20 @@ const RegisterScreen = () => {
           dispatch(register({ firstName, email, password }));
         }}
         style={styles.button}
+        loading={isRegisterLoading}
+        disabled={isRegisterLoading}
       >
         Sign up
+      </Button>
+      <Text style={styles.alreadyHaveAnAccountText}>Already have an account?</Text>
+      <Button
+        mode="contained"
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate('Login');
+        }}
+      >
+        Login
       </Button>
     </View>
   );
@@ -52,6 +69,10 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
+  },
+  alreadyHaveAnAccountText: {
+    marginTop: 30,
+    marginBottom: 10,
   },
 });
 
