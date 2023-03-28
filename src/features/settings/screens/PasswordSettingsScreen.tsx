@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 
-import { useAppDispatch } from '../../../../hooks';
-import { changePassword } from '../../state/passwordSettingsReducer';
+import { useAppDispatch } from '../../../hooks';
+import { changePassword } from '../state/passwordSettingsReducer';
 
 const PasswordSettingsScreen = () => {
   const dispatch = useAppDispatch();

@@ -1,13 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Divider, List, useTheme } from 'react-native-paper';
-import { Linking } from 'react-native/Libraries/Linking/Linking';
 
-import { RootStackParams } from '../../../../App';
-import { WEB_URL } from '../../../../constants';
-import { useAppDispatch } from '../../../../hooks';
-import useConfirmationDialog from '../../../../hooks/useConfirmationDialog';
-import { logout } from '../../../auth/state/loginAuthReducer';
+import { RootStackParams } from '../../../App';
+import { WEB_URL } from '../../../constants';
+import { useAppDispatch } from '../../../hooks';
+import useConfirmationDialog from '../../../hooks/useConfirmationDialog';
+import { logout } from '../../auth/state/loginAuthReducer';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Settings'>;
 
@@ -39,7 +38,11 @@ const SettingsScreen = ({ navigation }: Props) => {
         <List.Item
           title="Terms of service"
           onPress={async () => {
-            await Linking.openURL(`${WEB_URL}/terms-of-service`);
+            try {
+              await Linking.openURL(`${WEB_URL}/terms-of-service`);
+            } catch (error) {
+              console.log(error);
+            }
           }}
         />
         <List.Item

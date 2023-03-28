@@ -2,9 +2,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
 import { Appbar, Text } from 'react-native-paper';
 
-import { RootStackParams } from '../../../../App';
-import { useAppSelector } from '../../../../hooks';
-import { userSelector } from '../../../auth/state/authReducer';
+import { RootStackParams } from '../../../App';
+import { useAppSelector } from '../../../hooks';
+import { userSelector } from '../../auth/state/authReducer';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Dashboard'>;
 
