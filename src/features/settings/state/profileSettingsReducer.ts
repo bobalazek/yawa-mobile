@@ -52,6 +52,57 @@ export const updateProfile = createAsyncThunk<undefined, { email: string; firstN
   }
 );
 
+export const resendNewEmailConfirmationEmail = createAsyncThunk<undefined, void, { extra: StoreExtra }>(
+  'settingsProfile/resendNewEmailConfirmationEmail',
+  async (_, { rejectWithValue, extra }) => {
+    try {
+      const responseMessage = await settingsService.resendNewEmailConfirmationEmail();
+
+      extra.showToast({
+        type: 'success',
+        text1: 'Resend new email confirmation email',
+        text2: responseMessage,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      extra.showToast({
+        type: 'error',
+        text1: 'Error',
+        text2: err.message,
+      });
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+export const cancelNewEmail = createAsyncThunk<undefined, void, { extra: StoreExtra }>(
+  'settingsProfile/resendNewEmailConfirmationEmail',
+  async (_, { rejectWithValue, dispatch, extra }) => {
+    try {
+      const responseMessage = await settingsService.cancelNewEmail();
+      await dispatch(refreshUser());
+
+      extra.showToast({
+        type: 'success',
+        text1: 'Cancel new email',
+        text2: responseMessage,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      extra.showToast({
+        type: 'error',
+        text1: 'Error',
+        text2: err.message,
+      });
+
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 export const { setIsLoading } = slice.actions;
 
 export const isLoadingSelector = (state: RootState) => state.profileSettings.isLoading;

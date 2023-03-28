@@ -59,6 +59,56 @@ class SettingsService {
       throw new Error('Something went wrong. Please make sure you have a stable internet connection.');
     }
   }
+
+  async resendNewEmailConfirmationEmail(): Promise<string> {
+    try {
+      const response = await axios.post<{ message: string }>(
+        `${API_URL}/api/v1/settings/resend-new-email-confirmation-email`,
+        {},
+        {
+          timeout: 5000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+        }
+      );
+
+      return response.data.message;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (err.response?.data?.error) {
+        throw new Error(err.response.data.error);
+      }
+
+      throw new Error('Something went wrong. Please make sure you have a stable internet connection.');
+    }
+  }
+
+  async cancelNewEmail(): Promise<string> {
+    try {
+      const response = await axios.post<{ message: string }>(
+        `${API_URL}/api/v1/settings/cancel-new-email`,
+        {},
+        {
+          timeout: 5000,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+        }
+      );
+
+      return response.data.message;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      if (err.response?.data?.error) {
+        throw new Error(err.response.data.error);
+      }
+
+      throw new Error('Something went wrong. Please make sure you have a stable internet connection.');
+    }
+  }
 }
 
 export default new SettingsService();

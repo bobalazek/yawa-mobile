@@ -4,7 +4,7 @@ import { Button, Text, TextInput } from 'react-native-paper';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { refreshUser, userSelector } from '../../auth/state/authReducer';
-import { updateProfile } from '../state/profileSettingsReducer';
+import { cancelNewEmail, resendNewEmailConfirmationEmail, updateProfile } from '../state/profileSettingsReducer';
 
 const ProfileSettingsScreen = () => {
   const dispatch = useAppDispatch();
@@ -24,13 +24,31 @@ const ProfileSettingsScreen = () => {
       {user?.newEmail && (
         <Text style={styles.textLeft}>
           Your new email is set to <Text style={styles.textBold}>{user.newEmail}</Text>. Please confirm it with the
-          email we sent to you.
+          email we sent to you. Didn't receive an email?{' '}
+          <Text
+            style={styles.linkText}
+            onPress={() => {
+              dispatch(resendNewEmailConfirmationEmail());
+            }}
+          >
+            Resend now
+          </Text>{' '}
+          or{' '}
+          <Text
+            style={styles.linkText}
+            onPress={() => {
+              dispatch(cancelNewEmail());
+            }}
+          >
+            cancel
+          </Text>
         </Text>
       )}
       <Button
         onPress={() => {
           dispatch(updateProfile({ firstName, email }));
         }}
+        style={styles.saveButton}
       >
         Save
       </Button>
@@ -46,11 +64,17 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 16,
   },
+  linkText: {
+    color: 'blue',
+  },
   textLeft: {
     textAlign: 'left',
   },
   textBold: {
     fontWeight: 'bold',
+  },
+  saveButton: {
+    marginTop: 20,
   },
 });
 
