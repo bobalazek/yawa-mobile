@@ -6,16 +6,16 @@ import { RootState, StoreExtra } from '../../../store';
 import authService from '../services/authService';
 import { refreshUser, setAccessToken, setUser } from './authReducer';
 
-interface AuthLoginState {
+interface LoginAuthState {
   isLoading: boolean;
 }
 
-const initialState: AuthLoginState = {
+const initialState: LoginAuthState = {
   isLoading: false,
 };
 
 const slice = createSlice({
-  name: 'authLogin',
+  name: 'loginAuth',
   initialState,
   reducers: {
     setIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -25,7 +25,7 @@ const slice = createSlice({
 });
 
 export const login = createAsyncThunk<undefined, { email: string; password: string }, { extra: StoreExtra }>(
-  'authLogin/login',
+  'loginAuth/login',
   async ({ email, password }, { dispatch, rejectWithValue, extra }) => {
     try {
       dispatch(setIsLoading(true));
@@ -58,16 +58,13 @@ export const login = createAsyncThunk<undefined, { email: string; password: stri
 );
 
 export const logout = createAsyncThunk<undefined, undefined, { extra: StoreExtra }>(
-  'authLogin/logout',
-  async (_, { dispatch, rejectWithValue, getState, extra }) => {
+  'loginAuth/logout',
+  async (_, { dispatch, rejectWithValue, extra }) => {
     try {
-      const state = getState() as RootState;
-      if (state.auth.accessToken) {
-        try {
-          await authService.logout(state.auth.accessToken);
-        } catch (err) {
-          // Not a big deal if logout fails
-        }
+      try {
+        await authService.logout();
+      } catch (err) {
+        // Not a big deal if logout fails
       }
 
       await Keychain.resetGenericPassword();
@@ -96,6 +93,6 @@ export const logout = createAsyncThunk<undefined, undefined, { extra: StoreExtra
 
 export const { setIsLoading } = slice.actions;
 
-export const isLoadingSelector = (state: RootState) => state.authLogin.isLoading;
+export const isLoadingSelector = (state: RootState) => state.loginAuth.isLoading;
 
 export default slice.reducer;

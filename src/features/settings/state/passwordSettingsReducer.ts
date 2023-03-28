@@ -27,17 +27,11 @@ export const changePassword = createAsyncThunk<
   { extra: StoreExtra }
 >(
   'passwordSettings/changePassword',
-  async ({ currentPassword, newPassword, newPasswordConfirm }, { dispatch, rejectWithValue, getState }) => {
+  async ({ currentPassword, newPassword, newPasswordConfirm }, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setIsLoading(true));
 
-      const state = getState() as RootState;
-      await settingsService.changePassword(
-        state.auth.accessToken ?? '',
-        currentPassword,
-        newPassword,
-        newPasswordConfirm
-      );
+      await settingsService.changePassword(currentPassword, newPassword, newPasswordConfirm);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

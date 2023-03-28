@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { API_URL, AUTHORIZATION_HEADER_NAME } from '../../../constants';
+import { API_URL } from '../../../constants';
 import { UserInterface } from '../../../types/UserInterface';
 
 class AuthService {
@@ -61,14 +61,13 @@ class AuthService {
     }
   }
 
-  async logout(accessToken: string): Promise<string> {
+  async logout(): Promise<string> {
     try {
       const response = await axios.post<{ message: string }>(`${API_URL}/api/v1/auth/logout`, {
         timeout: 5000,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json;charset=UTF-8',
-          [AUTHORIZATION_HEADER_NAME]: accessToken,
         },
       });
 
@@ -83,14 +82,13 @@ class AuthService {
     }
   }
 
-  async getProfile(accessToken: string): Promise<UserInterface | null> {
+  async getProfile(): Promise<UserInterface | null> {
     try {
       const response = await axios.get<UserInterface>(`${API_URL}/api/v1/auth/profile`, {
         timeout: 5000,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json;charset=UTF-8',
-          [AUTHORIZATION_HEADER_NAME]: accessToken,
         },
       });
 

@@ -6,16 +6,16 @@ import { RootState, StoreExtra } from '../../../store';
 import authService from '../services/authService';
 import { refreshUser, setAccessToken } from './authReducer';
 
-interface AuthRegisterState {
+interface RegisterAuthState {
   isLoading: boolean;
 }
 
-const initialState: AuthRegisterState = {
+const initialState: RegisterAuthState = {
   isLoading: false,
 };
 
 const slice = createSlice({
-  name: 'authRegister',
+  name: 'registerAuth',
   initialState,
   reducers: {
     setIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -28,7 +28,7 @@ export const register = createAsyncThunk<
   undefined,
   { firstName: string; email: string; password: string },
   { extra: StoreExtra }
->('authRegister/register', async ({ firstName, email, password }, { dispatch, rejectWithValue, extra }) => {
+>('registerAuth/register', async ({ firstName, email, password }, { dispatch, rejectWithValue, extra }) => {
   try {
     setIsLoading(true);
 
@@ -60,6 +60,6 @@ export const register = createAsyncThunk<
 
 export const { setIsLoading } = slice.actions;
 
-export const isLoadingSelector = (state: RootState) => state.authRegister.isLoading;
+export const isLoadingSelector = (state: RootState) => state.registerAuth.isLoading;
 
 export default slice.reducer;

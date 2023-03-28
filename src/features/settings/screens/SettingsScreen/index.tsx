@@ -5,7 +5,7 @@ import { Divider, List, useTheme } from 'react-native-paper';
 import { RootStackParams } from '../../../../App';
 import { useAppDispatch } from '../../../../hooks';
 import useConfirmationDialog from '../../../../hooks/useConfirmationDialog';
-import { logout } from '../../../auth/state/authLoginReducer';
+import { logout } from '../../../auth/state/loginAuthReducer';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Settings'>;
 

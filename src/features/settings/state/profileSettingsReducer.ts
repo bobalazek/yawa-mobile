@@ -23,12 +23,11 @@ const slice = createSlice({
 
 export const updateProfile = createAsyncThunk<undefined, { email: string; firstName: string }, { extra: StoreExtra }>(
   'settingsProfile/updateProfile',
-  async ({ email, firstName }, { dispatch, rejectWithValue, getState }) => {
+  async ({ email, firstName }, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setIsLoading(true));
 
-      const state = getState() as RootState;
-      await settingsService.updateProfile(state.auth.accessToken ?? '', email, firstName);
+      await settingsService.updateProfile(email, firstName);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

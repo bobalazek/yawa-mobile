@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import { API_URL, AUTHORIZATION_HEADER_NAME } from '../../../constants';
+import { API_URL } from '../../../constants';
 
 class SettingsService {
-  async updateProfile(accessToken: string, email: string, firstName: string): Promise<string> {
+  async updateProfile(email: string, firstName: string): Promise<string> {
     try {
       const response = await axios.post<{ message: string }>(
         `${API_URL}/api/v1/settings/update-profile`,
@@ -16,7 +16,6 @@ class SettingsService {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json;charset=UTF-8',
-            [AUTHORIZATION_HEADER_NAME]: accessToken,
           },
         }
       );
@@ -32,12 +31,7 @@ class SettingsService {
     }
   }
 
-  async changePassword(
-    accessToken: string,
-    currentPassword: string,
-    newPassword: string,
-    newPasswordConfirm: string
-  ): Promise<string> {
+  async changePassword(currentPassword: string, newPassword: string, newPasswordConfirm: string): Promise<string> {
     try {
       const response = await axios.post<{ token: string }>(
         `${API_URL}/api/v1/settings/change-password`,
@@ -51,7 +45,6 @@ class SettingsService {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json;charset=UTF-8',
-            [AUTHORIZATION_HEADER_NAME]: accessToken,
           },
         }
       );
