@@ -12,6 +12,7 @@ import PasswordSettingsScreen from './features/settings/screens/PasswordSettings
 import ProfileSettingsScreen from './features/settings/screens/ProfileSettingsScreen';
 import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
+import OfflineScreen from './screens/OfflineScreen';
 import SplashScreen from './screens/SplashScreen';
 import { setConnectionType, setIsConnected } from './state/networkReducer';
 
@@ -30,6 +31,7 @@ export type RootStackParams = {
   ProfileSettings: undefined;
   PasswordSettings: undefined;
   Notifications: undefined;
+  Offline: undefined;
 };
 
 export const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -42,6 +44,7 @@ const App = () => {
   useEffect(() => {
     dispatch(init());
 
+    // Network
     (async () => {
       const state = await NetInfo.fetch();
       dispatch(setIsConnected(!!state.isConnected));
@@ -87,6 +90,11 @@ const App = () => {
             <RootStack.Screen name="Register" component={RegisterScreen} options={{ title: 'Sign up' }} />
           </RootStack.Group>
         )}
+        <RootStack.Screen
+          name="Offline"
+          component={OfflineScreen}
+          options={{ presentation: 'modal', headerShown: false }}
+        />
       </RootStack.Navigator>
       <Toast config={toastConfig} />
     </>

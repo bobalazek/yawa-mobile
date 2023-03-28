@@ -38,11 +38,7 @@ const SettingsScreen = ({ navigation }: Props) => {
         <List.Item
           title="Terms of service"
           onPress={async () => {
-            try {
-              await Linking.openURL(`${WEB_URL}/terms-of-service`);
-            } catch (error) {
-              console.log(error);
-            }
+            await Linking.openURL(`${WEB_URL}/terms-of-service`);
           }}
         />
         <List.Item
