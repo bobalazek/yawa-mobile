@@ -35,12 +35,13 @@ const RegisterScreen = ({ navigation }: Props) => {
       >
         Sign up
       </Button>
-      <Text>
+      <Text style={styles.termsAndPrivacyText}>
         By clicking the Sign up button above, you agree to the{' '}
         <Text
           onPress={async () => {
             await Linking.openURL(`${WEB_URL}/terms-of-service`);
           }}
+          style={styles.link}
         >
           Terms of service
         </Text>{' '}
@@ -49,6 +50,7 @@ const RegisterScreen = ({ navigation }: Props) => {
           onPress={async () => {
             await Linking.openURL(`${WEB_URL}/privacy-policy`);
           }}
+          style={styles.link}
         >
           Privacy policy
         </Text>
@@ -89,6 +91,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
+  },
+  link: {
+    color: 'blue',
+  },
+  termsAndPrivacyText: {
+    marginTop: 10,
   },
   alreadyHaveAnAccountText: {
     marginTop: 30,

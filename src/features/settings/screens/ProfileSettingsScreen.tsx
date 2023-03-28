@@ -1,19 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, Text, TextInput } from 'react-native-paper';
 
-import { useAppDispatch } from '../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { refreshUser, userSelector } from '../../auth/state/authReducer';
 import { updateProfile } from '../state/profileSettingsReducer';
 
 const ProfileSettingsScreen = () => {
   const dispatch = useAppDispatch();
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
+  const user = useAppSelector(userSelector);
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [firstName, setFirstName] = useState(user?.firstName ?? '');
+
+  useEffect(() => {
+    // We do want to refresh the user, especially in the case the email was confirmed/changed
+    dispatch(refreshUser());
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
       <TextInput label="First name" value={firstName} onChangeText={setFirstName} style={styles.input} />
       <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
+      {user?.newEmail && (
+        <Text style={styles.textLeft}>
+          Your new email is set to <Text style={styles.textBold}>{user.newEmail}</Text>. Please confirm it with the
+          email we sent to you.
+        </Text>
+      )}
       <Button
         onPress={() => {
           dispatch(updateProfile({ firstName, email }));
@@ -32,6 +45,12 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 16,
+  },
+  textLeft: {
+    textAlign: 'left',
+  },
+  textBold: {
+    fontWeight: 'bold',
   },
 });
 
