@@ -1,3 +1,4 @@
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'react-native-toast-message';
@@ -13,7 +14,7 @@ import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
 import OfflineScreen from './screens/OfflineScreen';
 import SplashScreen from './screens/SplashScreen';
-import { attachEventListeners, detachEventListeners } from './state/networkReducer';
+import { attachEventListeners, detachEventListeners, isConnectedSelector } from './state/networkReducer';
 
 // Very confusing that the number of lines needs to be set
 const toastConfig = {
@@ -37,8 +38,10 @@ export const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const App = () => {
   const dispatch = useAppDispatch();
+  const navigationRef = useNavigationContainerRef<RootStackParams>();
   const isReady = useAppSelector(isReadySelector);
   const isAuthenticated = useAppSelector(isAuthenticatedSelector);
+  const isConnected = useAppSelector(isConnectedSelector);
 
   useEffect(() => {
     dispatch(init());
@@ -49,12 +52,25 @@ const App = () => {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (!navigationRef || !navigationRef.isReady()) {
+      return;
+    }
+
+    const route = navigationRef.getCurrentRoute();
+    if (route?.name !== 'Offline' && !isConnected) {
+      navigationRef.navigate('Offline');
+    } else if (route?.name === 'Offline' && isConnected) {
+      navigationRef.goBack();
+    }
+  }, [navigationRef, isConnected]);
+
   if (!isReady) {
     return <SplashScreen />;
   }
 
   return (
-    <>
+    <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator>
         {isAuthenticated ? (
           <RootStack.Group>
@@ -85,7 +101,7 @@ const App = () => {
         />
       </RootStack.Navigator>
       <Toast config={toastConfig} />
-    </>
+    </NavigationContainer>
   );
 };
 
