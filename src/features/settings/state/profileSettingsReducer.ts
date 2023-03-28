@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState, StoreExtra } from '../../../store';
+import { refreshUser } from '../../auth/state/authReducer';
 import settingsService from '../services/settingsService';
 
 interface ProfileSettingsState {
@@ -23,14 +24,27 @@ const slice = createSlice({
 
 export const updateProfile = createAsyncThunk<undefined, { email: string; firstName: string }, { extra: StoreExtra }>(
   'settingsProfile/updateProfile',
-  async ({ email, firstName }, { dispatch, rejectWithValue }) => {
+  async ({ email, firstName }, { dispatch, rejectWithValue, extra }) => {
     try {
       dispatch(setIsLoading(true));
 
-      await settingsService.updateProfile(email, firstName);
+      const responseMessage = await settingsService.updateProfile(email, firstName);
+      await dispatch(refreshUser());
+
+      extra.showToast({
+        type: 'success',
+        text1: 'Update profile',
+        text2: responseMessage,
+      });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
+      extra.showToast({
+        type: 'error',
+        text1: 'Error',
+        text2: err.message,
+      });
+
       return rejectWithValue(err.message);
     } finally {
       dispatch(setIsLoading(false));

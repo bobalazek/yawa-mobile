@@ -1,9 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput, Title } from 'react-native-paper';
 
 import { RootStackParams } from '../../../../App';
+import { WEB_URL } from '../../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { isLoadingSelector as isRegisterLoadingSelector, register } from '../../state/registerAuthReducer';
 
@@ -34,6 +35,25 @@ const RegisterScreen = ({ navigation }: Props) => {
       >
         Sign up
       </Button>
+      <Text>
+        By clicking the Sign up button above, you agree to the{' '}
+        <Text
+          onPress={async () => {
+            await Linking.openURL(`${WEB_URL}/terms-of-service`);
+          }}
+        >
+          Terms of service
+        </Text>{' '}
+        and{' '}
+        <Text
+          onPress={async () => {
+            await Linking.openURL(`${WEB_URL}/privacy-policy`);
+          }}
+        >
+          Privacy policy
+        </Text>
+        .
+      </Text>
       <Text style={styles.alreadyHaveAnAccountText}>Already have an account?</Text>
       <Button
         mode="contained"

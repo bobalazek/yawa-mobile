@@ -2,7 +2,11 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 
+import { useAppDispatch } from '../../../../hooks';
+import { updateProfile } from '../../state/profileSettingsReducer';
+
 const ProfileSettingsScreen = () => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
 
@@ -12,7 +16,7 @@ const ProfileSettingsScreen = () => {
       <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
       <Button
         onPress={() => {
-          // TODO
+          dispatch(updateProfile({ firstName, email }));
         }}
       >
         Save

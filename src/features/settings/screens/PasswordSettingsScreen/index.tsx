@@ -2,7 +2,11 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 
+import { useAppDispatch } from '../../../../hooks';
+import { changePassword } from '../../state/passwordSettingsReducer';
+
 const PasswordSettingsScreen = () => {
+  const dispatch = useAppDispatch();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
@@ -32,7 +36,7 @@ const PasswordSettingsScreen = () => {
       />
       <Button
         onPress={() => {
-          // TODO
+          dispatch(changePassword({ currentPassword, newPassword, newPasswordConfirm }));
         }}
       >
         Save
