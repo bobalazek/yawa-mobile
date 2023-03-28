@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Linking, StyleSheet, View } from 'react-native';
-import { Divider, List, useTheme } from 'react-native-paper';
+import { Button, Divider, List, useTheme } from 'react-native-paper';
 
 import { RootStackParams } from '../../../App';
 import { WEB_URL } from '../../../constants';
@@ -31,6 +31,12 @@ const SettingsScreen = ({ navigation }: Props) => {
             navigation.navigate('PasswordSettings');
           }}
         />
+        <List.Item
+          title="Account deletion"
+          onPress={() => {
+            navigation.navigate('AccountDeletionSettings');
+          }}
+        />
       </List.Section>
       <Divider />
       <List.Section>
@@ -48,18 +54,18 @@ const SettingsScreen = ({ navigation }: Props) => {
           }}
         />
       </List.Section>
-      <Divider />
-      <List.Section>
-        <List.Item
-          title="Logout"
-          titleStyle={[styles.logoutListItem, { borderColor: theme.colors.error, color: theme.colors.error }]}
-          onPress={() => {
-            showConfirmationDialog(() => {
-              dispatch(logout());
-            });
-          }}
-        />
-      </List.Section>
+      <Button
+        onPress={() => {
+          showConfirmationDialog(() => {
+            dispatch(logout());
+          });
+        }}
+        mode="contained"
+        buttonColor={theme.colors.error}
+        style={styles.logoutButton}
+      >
+        Logout
+      </Button>
       <ConfirmationDialog title="Confirm logout" message="Are you sure you want to logout?" />
     </View>
   );
@@ -73,10 +79,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  logoutListItem: {
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 2,
+  logoutButton: {
+    margin: 20,
   },
 });
 

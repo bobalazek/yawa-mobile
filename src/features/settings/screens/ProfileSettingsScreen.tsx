@@ -48,7 +48,7 @@ const ProfileSettingsScreen = () => {
         onPress={() => {
           dispatch(updateProfile({ firstName, email }));
         }}
-        style={styles.saveButton}
+        mode="contained"
       >
         Save
       </Button>
@@ -72,9 +72,6 @@ const styles = StyleSheet.create({
   },
   textBold: {
     fontWeight: 'bold',
-  },
-  saveButton: {
-    marginTop: 20,
   },
 });
 

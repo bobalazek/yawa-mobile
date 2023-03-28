@@ -8,6 +8,7 @@ import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
 import DashboardScreen from './features/dashboard/screens/DashboardScreen';
 import NotificationsScreen from './features/notifications/screens/NotificationsScreen';
+import AccountDeletionSettingsScreen from './features/settings/screens/AccountDeletionSettingsScreen';
 import PasswordSettingsScreen from './features/settings/screens/PasswordSettingsScreen';
 import ProfileSettingsScreen from './features/settings/screens/ProfileSettingsScreen';
 import SettingsScreen from './features/settings/screens/SettingsScreen';
@@ -30,6 +31,7 @@ export type RootStackParams = {
   Settings: undefined;
   ProfileSettings: undefined;
   PasswordSettings: undefined;
+  AccountDeletionSettings: undefined;
   Notifications: undefined;
   Offline: undefined;
 };
@@ -85,6 +87,11 @@ const App = () => {
               name="PasswordSettings"
               component={PasswordSettingsScreen}
               options={{ title: 'Password settings' }}
+            />
+            <RootStack.Screen
+              name="AccountDeletionSettings"
+              component={AccountDeletionSettingsScreen}
+              options={{ title: 'Account deletion settings' }}
             />
             <RootStack.Screen name="Notifications" component={NotificationsScreen} />
           </RootStack.Group>

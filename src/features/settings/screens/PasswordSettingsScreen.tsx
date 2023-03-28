@@ -38,6 +38,7 @@ const PasswordSettingsScreen = () => {
         onPress={() => {
           dispatch(changePassword({ currentPassword, newPassword, newPasswordConfirm }));
         }}
+        mode="contained"
       >
         Save
       </Button>
