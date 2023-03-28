@@ -88,6 +88,7 @@ export const { setIsReady, setAccessToken, setUser } = slice.actions;
 
 export const isReadySelector = (state: RootState) => state.auth.isReady;
 export const isAuthenticatedSelector = (state: RootState) => !!state.auth.user;
+export const accessTokenSelector = (state: RootState) => !!state.auth.accessToken;
 export const userSelector = (state: RootState) => state.auth.user;
 
 export default slice.reducer;

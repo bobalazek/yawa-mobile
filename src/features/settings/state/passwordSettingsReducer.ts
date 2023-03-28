@@ -3,16 +3,16 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState, StoreExtra } from '../../../store';
 import settingsService from '../services/settingsService';
 
-interface SettingsProfileState {
+interface PasswordSettingsState {
   isLoading: boolean;
 }
 
-const initialState: SettingsProfileState = {
+const initialState: PasswordSettingsState = {
   isLoading: false,
 };
 
 const slice = createSlice({
-  name: 'settingsProfile',
+  name: 'passwordSettings',
   initialState,
   reducers: {
     setIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -21,14 +21,23 @@ const slice = createSlice({
   },
 });
 
-export const updateProfile = createAsyncThunk<undefined, { email: string; firstName: string }, { extra: StoreExtra }>(
-  'settingsProfile/updateProfile',
-  async ({ email, firstName }, { dispatch, rejectWithValue, getState }) => {
+export const changePassword = createAsyncThunk<
+  undefined,
+  { currentPassword: string; newPassword: string; newPasswordConfirm: string },
+  { extra: StoreExtra }
+>(
+  'passwordSettings/changePassword',
+  async ({ currentPassword, newPassword, newPasswordConfirm }, { dispatch, rejectWithValue, getState }) => {
     try {
       dispatch(setIsLoading(true));
 
       const state = getState() as RootState;
-      await settingsService.updateProfile(state.auth.accessToken ?? '', email, firstName);
+      await settingsService.changePassword(
+        state.auth.accessToken ?? '',
+        currentPassword,
+        newPassword,
+        newPasswordConfirm
+      );
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -41,6 +50,6 @@ export const updateProfile = createAsyncThunk<undefined, { email: string; firstN
 
 export const { setIsLoading } = slice.actions;
 
-export const isLoadingSelector = (state: RootState) => state.settingsProfile.isLoading;
+export const isLoadingSelector = (state: RootState) => state.passwordSettings.isLoading;
 
 export default slice.reducer;

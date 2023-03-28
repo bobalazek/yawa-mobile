@@ -3,16 +3,16 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState, StoreExtra } from '../../../store';
 import settingsService from '../services/settingsService';
 
-interface SettingsPasswordState {
+interface ProfileSettingsState {
   isLoading: boolean;
 }
 
-const initialState: SettingsPasswordState = {
+const initialState: ProfileSettingsState = {
   isLoading: false,
 };
 
 const slice = createSlice({
-  name: 'settingsPassword',
+  name: 'profileSettings',
   initialState,
   reducers: {
     setIsLoading: (state, action: PayloadAction<boolean>) => {
@@ -21,23 +21,14 @@ const slice = createSlice({
   },
 });
 
-export const changePassword = createAsyncThunk<
-  undefined,
-  { currentPassword: string; newPassword: string; newPasswordConfirm: string },
-  { extra: StoreExtra }
->(
-  'settingsPassword/changePassword',
-  async ({ currentPassword, newPassword, newPasswordConfirm }, { dispatch, rejectWithValue, getState }) => {
+export const updateProfile = createAsyncThunk<undefined, { email: string; firstName: string }, { extra: StoreExtra }>(
+  'settingsProfile/updateProfile',
+  async ({ email, firstName }, { dispatch, rejectWithValue, getState }) => {
     try {
       dispatch(setIsLoading(true));
 
       const state = getState() as RootState;
-      await settingsService.changePassword(
-        state.auth.accessToken ?? '',
-        currentPassword,
-        newPassword,
-        newPasswordConfirm
-      );
+      await settingsService.updateProfile(state.auth.accessToken ?? '', email, firstName);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -50,6 +41,6 @@ export const changePassword = createAsyncThunk<
 
 export const { setIsLoading } = slice.actions;
 
-export const isLoadingSelector = (state: RootState) => state.settingsPassword.isLoading;
+export const isLoadingSelector = (state: RootState) => state.profileSettings.isLoading;
 
 export default slice.reducer;
