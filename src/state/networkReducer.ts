@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../store';
 
@@ -23,6 +24,22 @@ const networkSlice = createSlice({
       state.connectionType = action.payload;
     },
   },
+});
+
+let netInfoSubscription: NetInfoSubscription;
+export const attachEventListeners = createAsyncThunk('network/attachEventListeners', async (_, { dispatch }) => {
+  const state = await NetInfo.fetch();
+  dispatch(setIsConnected(!!state.isConnected));
+  dispatch(setConnectionType(state.type));
+
+  netInfoSubscription = NetInfo.addEventListener((eventState) => {
+    dispatch(setIsConnected(!!eventState.isConnected));
+    dispatch(setConnectionType(eventState.type));
+  });
+});
+
+export const detachEventListeners = createAsyncThunk('network/detachEventListeners', async () => {
+  netInfoSubscription();
 });
 
 export const { setIsConnected, setConnectionType } = networkSlice.actions;

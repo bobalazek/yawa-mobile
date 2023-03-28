@@ -1,4 +1,3 @@
-import NetInfo from '@react-native-community/netinfo';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'react-native-toast-message';
@@ -14,7 +13,7 @@ import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
 import OfflineScreen from './screens/OfflineScreen';
 import SplashScreen from './screens/SplashScreen';
-import { setConnectionType, setIsConnected } from './state/networkReducer';
+import { attachEventListeners, detachEventListeners } from './state/networkReducer';
 
 // Very confusing that the number of lines needs to be set
 const toastConfig = {
@@ -43,21 +42,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(init());
-
-    // Network
-    (async () => {
-      const state = await NetInfo.fetch();
-      dispatch(setIsConnected(!!state.isConnected));
-      dispatch(setConnectionType(state.type));
-    })();
-
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      dispatch(setIsConnected(!!state.isConnected));
-      dispatch(setConnectionType(state.type));
-    });
+    dispatch(attachEventListeners());
 
     return () => {
-      unsubscribe();
+      dispatch(detachEventListeners());
     };
   }, [dispatch]);
 
