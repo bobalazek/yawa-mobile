@@ -3,13 +3,15 @@ import axios from 'axios';
 import { API_URL } from '../../../constants';
 
 class SettingsService {
-  async updateProfile(email: string, firstName: string): Promise<string> {
+  async updateProfile(email: string, firstName: string, timezone: string, birthday: string | null): Promise<string> {
     try {
       const response = await axios.post<{ message: string }>(
         `${API_URL}/api/v1/settings/update-profile`,
         {
           email,
           firstName,
+          timezone,
+          birthday,
         },
         {
           timeout: 5000,

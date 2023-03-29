@@ -4,4 +4,7 @@ export interface UserInterface {
   newEmail: string | null;
   firstName: string;
   avatarUrl: string | null;
+  timezone: string;
+  measurementSystem: string;
+  birthday: string;
 }

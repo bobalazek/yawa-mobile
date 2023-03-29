@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as RNLocalize from 'react-native-localize';
 
 import { API_URL } from '../../../constants';
 import { UserInterface } from '../../../types/UserInterface';
@@ -40,6 +41,8 @@ class AuthService {
           firstName,
           email,
           password,
+          timezone: RNLocalize.getTimeZone(),
+          measurementSystem: RNLocalize.usesMetricSystem() ? 'metric' : 'imperial',
         },
         {
           timeout: 5000,

@@ -22,13 +22,17 @@ const slice = createSlice({
   },
 });
 
-export const updateProfile = createAsyncThunk<undefined, { email: string; firstName: string }, { extra: StoreExtra }>(
+export const updateProfile = createAsyncThunk<
+  undefined,
+  { email: string; firstName: string; timezone: string; birthday: string | null },
+  { extra: StoreExtra }
+>(
   'settingsProfile/updateProfile',
-  async ({ email, firstName }, { dispatch, rejectWithValue, extra }) => {
+  async ({ email, firstName, timezone, birthday }, { dispatch, rejectWithValue, extra }) => {
     try {
       dispatch(setIsLoading(true));
 
-      const responseMessage = await settingsService.updateProfile(email, firstName);
+      const responseMessage = await settingsService.updateProfile(email, firstName, timezone, birthday);
       await dispatch(refreshUser());
 
       extra.showToast({
