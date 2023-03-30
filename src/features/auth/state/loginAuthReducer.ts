@@ -42,15 +42,16 @@ export const login = createAsyncThunk<undefined, { email: string; password: stri
         text1: 'Login',
         text2: 'You have successfully logged in',
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
+
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     } finally {
       dispatch(setIsLoading(false));
     }
@@ -77,16 +78,16 @@ export const logout = createAsyncThunk<undefined, undefined, { extra: StoreExtra
         text1: 'Logout',
         text2: 'You have successfully logged out',
       });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     }
   }
 );

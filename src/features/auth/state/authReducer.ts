@@ -49,15 +49,16 @@ export const init = createAsyncThunk<void, void, { extra: StoreExtra }>(
         dispatch(setAccessToken(accessToken));
         await dispatch(refreshUser());
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
+
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     } finally {
       dispatch(setIsReady(true));
     }
@@ -72,15 +73,16 @@ export const refreshUser = createAsyncThunk<void, void, { extra: StoreExtra }>(
       if (user) {
         dispatch(setUser(user));
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
+
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     }
   }
 );

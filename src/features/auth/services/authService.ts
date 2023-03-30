@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as RNLocalize from 'react-native-localize';
 
 import { API_URL } from '../../../constants';
@@ -23,9 +23,8 @@ class AuthService {
       );
 
       return response.data.token;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      if (err.response?.data?.error) {
+    } catch (err: unknown) {
+      if (err instanceof AxiosError && err.response?.data?.error) {
         throw new Error(err.response.data.error);
       }
 
@@ -54,9 +53,8 @@ class AuthService {
       );
 
       return response.data.token;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      if (err.response?.data?.error) {
+    } catch (err: unknown) {
+      if (err instanceof AxiosError && err.response?.data?.error) {
         throw new Error(err.response.data.error);
       }
 
@@ -75,9 +73,8 @@ class AuthService {
       });
 
       return response.data.message;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      if (err.response?.data?.error) {
+    } catch (err: unknown) {
+      if (err instanceof AxiosError && err.response?.data?.error) {
         throw new Error(err.response.data.error);
       }
 
@@ -96,8 +93,7 @@ class AuthService {
       });
 
       return response.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err: unknown) {
       return null;
     }
   }

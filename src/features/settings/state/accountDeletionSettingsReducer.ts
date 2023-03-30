@@ -37,16 +37,16 @@ export const requestAccountDeletion = createAsyncThunk<undefined, undefined, { e
         text1: 'Account deletion',
         text2: responseMessage,
       });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     } finally {
       dispatch(setIsLoading(false));
     }

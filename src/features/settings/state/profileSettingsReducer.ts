@@ -40,16 +40,16 @@ export const updateProfile = createAsyncThunk<
         text1: 'Update profile',
         text2: responseMessage,
       });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     } finally {
       dispatch(setIsLoading(false));
     }
@@ -67,16 +67,16 @@ export const resendNewEmailConfirmationEmail = createAsyncThunk<undefined, void,
         text1: 'Resend new email confirmation email',
         text2: responseMessage,
       });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -93,16 +93,16 @@ export const cancelNewEmail = createAsyncThunk<undefined, void, { extra: StoreEx
         text1: 'Cancel new email',
         text2: responseMessage,
       });
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
       extra.showToast({
         type: 'error',
         text1: 'Error',
-        text2: err.message,
+        text2: errorMessage,
       });
 
-      return rejectWithValue(err.message);
+      return rejectWithValue(errorMessage);
     }
   }
 );
