@@ -6,9 +6,9 @@ import { RootStackParams } from '../../../App';
 import { useAppSelector } from '../../../hooks';
 import { userSelector } from '../../auth/state/authReducer';
 
-type Props = NativeStackScreenProps<RootStackParams, 'Dashboard'>;
+type Props = NativeStackScreenProps<RootStackParams, 'Home'>;
 
-const DashboardScreen = ({ navigation }: Props) => {
+const HomeScreen = ({ navigation }: Props) => {
   const user = useAppSelector(userSelector);
 
   return (
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DashboardScreen;
+export default HomeScreen;

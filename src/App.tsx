@@ -6,7 +6,7 @@ import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'reac
 import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
-import DashboardScreen from './features/dashboard/screens/DashboardScreen';
+import HomeScreen from './features/home/screens/HomeScreen';
 import NotificationsScreen from './features/notifications/screens/NotificationsScreen';
 import AccountDeletionSettingsScreen from './features/settings/screens/AccountDeletionSettingsScreen';
 import PasswordSettingsScreen from './features/settings/screens/PasswordSettingsScreen';
@@ -27,7 +27,7 @@ const toastConfig = {
 export type RootStackParams = {
   Login: undefined;
   Register: undefined;
-  Dashboard: undefined;
+  Home: undefined;
   Settings: undefined;
   ProfileSettings: undefined;
   PasswordSettings: undefined;
@@ -76,7 +76,7 @@ const App = () => {
       <RootStack.Navigator>
         {isAuthenticated ? (
           <RootStack.Group>
-            <RootStack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
+            <RootStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
             <RootStack.Screen name="Settings" component={SettingsScreen} />
             <RootStack.Screen
               name="ProfileSettings"
