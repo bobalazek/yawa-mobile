@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 
 import { useAppDispatch } from '../../../hooks';
-import { changePassword } from '../state/passwordSettingsReducer';
+import { changePassword } from '../state/passwordSettingsSlice';
 
 const PasswordSettingsScreen = () => {
   const dispatch = useAppDispatch();

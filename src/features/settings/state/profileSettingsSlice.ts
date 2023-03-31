@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState, StoreExtra } from '../../../store';
-import { refreshUser } from '../../auth/state/authReducer';
+import { refreshUser } from '../../auth/state/authSlice';
 import settingsService from '../services/settingsService';
 
 interface ProfileSettingsState {

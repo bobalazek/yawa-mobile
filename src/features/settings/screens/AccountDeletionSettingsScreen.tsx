@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 import { useAppDispatch } from '../../../hooks';
-import { requestAccountDeletion } from '../state/accountDeletionSettingsReducer';
+import { requestAccountDeletion } from '../state/accountDeletionSettingsSlice';
 
 const AccountDeletionSettingsScreen = () => {
   const dispatch = useAppDispatch();

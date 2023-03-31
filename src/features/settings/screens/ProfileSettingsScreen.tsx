@@ -7,8 +7,8 @@ import { Button, Text, TextInput } from 'react-native-paper';
 import { DatePickerModal, en, registerTranslation } from 'react-native-paper-dates';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { refreshUser, userSelector } from '../../auth/state/authReducer';
-import { cancelNewEmail, resendNewEmailConfirmationEmail, updateProfile } from '../state/profileSettingsReducer';
+import { refreshUser, userSelector } from '../../auth/state/authSlice';
+import { cancelNewEmail, resendNewEmailConfirmationEmail, updateProfile } from '../state/profileSettingsSlice';
 
 registerTranslation('en', en);
 

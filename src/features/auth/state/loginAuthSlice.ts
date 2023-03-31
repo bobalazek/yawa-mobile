@@ -4,7 +4,7 @@ import * as Keychain from 'react-native-keychain';
 import { KEYCHAIN_USERNAME_KEY } from '../../../constants';
 import { RootState, StoreExtra } from '../../../store';
 import authService from '../services/authService';
-import { refreshUser, setAccessToken, setUser } from './authReducer';
+import { refreshUser, setAccessToken, setUser } from './authSlice';
 
 interface LoginAuthState {
   isLoading: boolean;

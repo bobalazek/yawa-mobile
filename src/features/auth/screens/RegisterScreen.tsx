@@ -6,7 +6,7 @@ import { Button, Text, TextInput, Title } from 'react-native-paper';
 import { RootStackParams } from '../../../App';
 import { WEB_URL } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { isLoadingSelector as isRegisterLoadingSelector, register } from '../state/registerAuthReducer';
+import { isLoadingSelector as isRegisterLoadingSelector, register } from '../state/registerAuthSlice';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Register'>;
 

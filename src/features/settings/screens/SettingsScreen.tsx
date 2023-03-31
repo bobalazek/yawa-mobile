@@ -6,7 +6,7 @@ import { RootStackParams } from '../../../App';
 import { WEB_URL } from '../../../constants';
 import { useAppDispatch } from '../../../hooks';
 import useConfirmationDialog from '../../../hooks/useConfirmationDialog';
-import { logout } from '../../auth/state/loginAuthReducer';
+import { logout } from '../../auth/state/loginAuthSlice';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Settings'>;
 

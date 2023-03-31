@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState, StoreExtra } from '../../../store';
-import { logout } from '../../auth/state/loginAuthReducer';
+import { logout } from '../../auth/state/loginAuthSlice';
 import settingsService from '../services/settingsService';
 
 interface AccountDeletionSettingsState {

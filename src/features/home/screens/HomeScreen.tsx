@@ -4,7 +4,7 @@ import { Appbar, Avatar, Button, Text } from 'react-native-paper';
 
 import { RootStackParams } from '../../../App';
 import { useAppSelector } from '../../../hooks';
-import { userSelector } from '../../auth/state/authReducer';
+import { userSelector } from '../../auth/state/authSlice';
 
 type Props = NativeStackScreenProps<RootStackParams, 'Home'>;
 

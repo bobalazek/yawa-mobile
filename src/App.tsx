@@ -6,7 +6,7 @@ import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'reac
 import ActionsScreen from './features/actions/screens/ActionsScreen';
 import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
-import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
+import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authSlice';
 import HomeScreen from './features/home/screens/HomeScreen';
 import NotificationsScreen from './features/notifications/screens/NotificationsScreen';
 import AccountDeletionSettingsScreen from './features/settings/screens/AccountDeletionSettingsScreen';
@@ -16,7 +16,7 @@ import SettingsScreen from './features/settings/screens/SettingsScreen';
 import { useAppDispatch, useAppSelector } from './hooks';
 import OfflineScreen from './screens/OfflineScreen';
 import SplashScreen from './screens/SplashScreen';
-import { attachEventListeners, detachEventListeners, isConnectedSelector } from './state/networkReducer';
+import { attachEventListeners, detachEventListeners, isConnectedSelector } from './state/networkSlice';
 
 // Very confusing that the number of lines needs to be set
 const toastConfig = {

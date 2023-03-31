@@ -2,13 +2,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 
 import { NODE_ENV } from './constants';
-import authReducer from './features/auth/state/authReducer';
-import loginAuthReducer from './features/auth/state/loginAuthReducer';
-import registerAuthReducer from './features/auth/state/registerAuthReducer';
-import accountDeletionSettingsReducer from './features/settings/state/accountDeletionSettingsReducer';
-import passwordSettingsReducer from './features/settings/state/passwordSettingsReducer';
-import profileSettingsReducer from './features/settings/state/profileSettingsReducer';
-import networkReducer from './state/networkReducer';
+import authReducer from './features/auth/state/authSlice';
+import loginAuthReducer from './features/auth/state/loginAuthSlice';
+import registerAuthReducer from './features/auth/state/registerAuthSlice';
+import accountDeletionSettingsReducer from './features/settings/state/accountDeletionSettingsSlice';
+import passwordSettingsReducer from './features/settings/state/passwordSettingsSlice';
+import profileSettingsReducer from './features/settings/state/profileSettingsSlice';
+import networkReducer from './state/networkSlice';
 
 const reducer = combineReducers({
   auth: authReducer,
