@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import Toast from 'react-native-toast-message';
 
 import { NODE_ENV } from './constants';
+import actionsReducer from './features/actions/state/actionsSlice';
 import authReducer from './features/auth/state/authSlice';
 import loginAuthReducer from './features/auth/state/loginAuthSlice';
 import registerAuthReducer from './features/auth/state/registerAuthSlice';
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   passwordSettings: passwordSettingsReducer,
   profileSettings: profileSettingsReducer,
   accountDeletionSettings: accountDeletionSettingsReducer,
+  actions: actionsReducer,
   network: networkReducer,
 });
 

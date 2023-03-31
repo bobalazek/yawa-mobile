@@ -1,24 +1,25 @@
 import { StyleSheet, View } from 'react-native';
-import { Title } from 'react-native-paper';
+
+import ActionsList from '../components/ActionsList/ActionsList';
+import ActionsListFilters from '../components/ActionsListFilters/ActionsListFilters';
 
 const ActionsScreen = () => {
   return (
     <View style={styles.container}>
-      <Title style={styles.title}>Actions</Title>
+      <View style={styles.filters}>
+        <ActionsListFilters />
+      </View>
+      <ActionsList />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  filters: {
+    marginBottom: 20,
   },
 });
 

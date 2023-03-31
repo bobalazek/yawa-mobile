@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   content: {
-    paddingTop: 10,
+    padding: 10,
   },
 });
 
