@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
-import { Appbar, Text } from 'react-native-paper';
+import { Appbar, Avatar, Text } from 'react-native-paper';
 
 import { RootStackParams } from '../../../App';
 import { useAppSelector } from '../../../hooks';
@@ -14,6 +14,9 @@ const HomeScreen = ({ navigation }: Props) => {
   return (
     <View>
       <Appbar.Header style={styles.appbarHeader}>
+        {user?.avatarUrl && (
+          <Avatar.Image source={{ uri: user.avatarUrl }} style={styles.appBarHeaderAvatar} size={48} />
+        )}
         <Appbar.Content
           title={
             <Text style={styles.appbarContentTitle}>
@@ -41,6 +44,10 @@ const HomeScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   appbarHeader: {
     backgroundColor: '#ffffff',
+  },
+  appBarHeaderAvatar: {
+    marginLeft: 5,
+    marginRight: 10,
   },
   appbarContentTitle: {
     fontSize: 16,
