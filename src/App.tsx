@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
 import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'react-native-toast-message';
 
+import ActionsScreen from './features/actions/screens/ActionsScreen';
 import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authReducer';
@@ -32,6 +33,7 @@ export type RootStackParams = {
   ProfileSettings: undefined;
   PasswordSettings: undefined;
   AccountDeletionSettings: undefined;
+  Actions: undefined;
   Notifications: undefined;
   Offline: undefined;
 };
@@ -93,6 +95,7 @@ const App = () => {
               component={AccountDeletionSettingsScreen}
               options={{ title: 'Account deletion settings' }}
             />
+            <RootStack.Screen name="Actions" component={ActionsScreen} />
             <RootStack.Screen name="Notifications" component={NotificationsScreen} />
           </RootStack.Group>
         ) : (

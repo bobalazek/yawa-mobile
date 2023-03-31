@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StyleSheet, View } from 'react-native';
-import { Appbar, Avatar, Text } from 'react-native-paper';
+import { Appbar, Avatar, Button, Text } from 'react-native-paper';
 
 import { RootStackParams } from '../../../App';
 import { useAppSelector } from '../../../hooks';
@@ -37,6 +37,15 @@ const HomeScreen = ({ navigation }: Props) => {
           }}
         />
       </Appbar.Header>
+      <View style={styles.content}>
+        <Button
+          onPress={() => {
+            navigation.navigate('Actions');
+          }}
+        >
+          View actions
+        </Button>
+      </View>
     </View>
   );
 };
@@ -54,6 +63,9 @@ const styles = StyleSheet.create({
   },
   appbarContentTitleName: {
     fontWeight: 'bold',
+  },
+  content: {
+    paddingTop: 10,
   },
 });
 
