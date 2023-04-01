@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow yarn",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint . --fix",
@@ -22,6 +21,7 @@
     "luxon": "^3.3.0",
     "moment-timezone": "^0.5.42",
     "react": "18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-native": "0.71.4",
     "react-native-device-info": "^10.5.0",
     "react-native-keychain": "^8.1.1",

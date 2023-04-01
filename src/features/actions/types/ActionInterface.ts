@@ -1,5 +1,5 @@
 export class ActionInterface {
-  id!: string;
+  id?: string;
   template?: string;
   name!: string;
   description?: string;

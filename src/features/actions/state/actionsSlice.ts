@@ -6,12 +6,12 @@ import { ActionInterface } from '../types/ActionInterface';
 
 interface ActionsState {
   isLoading: boolean;
-  actions: ActionInterface[];
+  entries: ActionInterface[];
 }
 
 const initialState: ActionsState = {
   isLoading: false,
-  actions: [],
+  entries: [],
 };
 
 const slice = createSlice({
@@ -21,21 +21,21 @@ const slice = createSlice({
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    setActions: (state, action: PayloadAction<ActionInterface[]>) => {
-      state.actions = action.payload;
+    setEntries: (state, action: PayloadAction<ActionInterface[]>) => {
+      state.entries = action.payload;
     },
   },
 });
 
-export const fetchActions = createAsyncThunk<undefined, undefined>(
-  'actions/updateProfile',
+export const fetchEntries = createAsyncThunk<undefined, undefined>(
+  'actions/fetchEntries',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setIsLoading(true));
 
-      const actions = await actionsService.getAll();
+      const entries = await actionsService.getAll();
 
-      dispatch(setActions(actions));
+      dispatch(setEntries(entries));
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
@@ -46,9 +46,9 @@ export const fetchActions = createAsyncThunk<undefined, undefined>(
   }
 );
 
-export const { setIsLoading, setActions } = slice.actions;
+export const { setIsLoading, setEntries } = slice.actions;
 
 export const isLoadingSelector = (state: RootState) => state.actions.isLoading;
-export const actionsSelector = (state: RootState) => state.actions.actions;
+export const entriesSelector = (state: RootState) => state.actions.entries;
 
 export default slice.reducer;

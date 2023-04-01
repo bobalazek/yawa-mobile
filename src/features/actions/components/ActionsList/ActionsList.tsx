@@ -1,12 +1,53 @@
-import { View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Text } from 'react-native-paper';
+
+import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import { entriesSelector, fetchEntries, isLoadingSelector } from '../../state/actionsSlice';
 
 const ActionsList = () => {
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(isLoadingSelector);
+  const entries = useAppSelector(entriesSelector);
+
+  useEffect(() => {
+    dispatch(fetchEntries());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} />
+      </View>
+    );
+  }
+
+  if (entries.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.textCenter}>No actions found yet</Text>
+      </View>
+    );
+  }
+
   return (
-    <View>
-      <Text>ACTIONS LIST</Text>
+    <View style={styles.container}>
+      <Text style={styles.textCenter}>ACTIONS LIST</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignContent: 'center',
+  },
+  loadingContainer: {
+    padding: 24,
+    textAlign: 'center',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+});
 
 export default ActionsList;

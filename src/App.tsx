@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Toast, { BaseToastProps, ErrorToast, InfoToast, SuccessToast } from 'react-native-toast-message';
 
 import ActionsScreen from './features/actions/screens/ActionsScreen';
+import NewActionScreen from './features/actions/screens/NewActionScreen';
 import LoginScreen from './features/auth/screens/LoginScreen';
 import RegisterScreen from './features/auth/screens/RegisterScreen';
 import { init, isAuthenticatedSelector, isReadySelector } from './features/auth/state/authSlice';
@@ -34,6 +35,7 @@ export type RootStackParams = {
   PasswordSettings: undefined;
   AccountDeletionSettings: undefined;
   Actions: undefined;
+  NewAction: undefined;
   Notifications: undefined;
   Offline: undefined;
 };
@@ -96,6 +98,7 @@ const App = () => {
               options={{ title: 'Account deletion settings' }}
             />
             <RootStack.Screen name="Actions" component={ActionsScreen} />
+            <RootStack.Screen name="NewAction" component={NewActionScreen} options={{ title: 'New action' }} />
             <RootStack.Screen name="Notifications" component={NotificationsScreen} />
           </RootStack.Group>
         ) : (
