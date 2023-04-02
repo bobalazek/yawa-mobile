@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Picker } from '@react-native-picker/picker';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
@@ -28,15 +28,8 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
     },
   });
   const goalType = useWatch({ control, name: 'goalType' });
-  const goalUnit = useWatch({ control, name: 'goalUnit' });
   const [goalUnitVisible, setGoalUnitVisible] = useState(false);
   const [goalUnitCustom, setGoalUnitCustom] = useState('');
-
-  useEffect(() => {
-    if (goalUnit === CUSTOM_KEY && !goalUnitVisible) {
-      setGoalUnitVisible(true);
-    }
-  }, [goalUnit, goalUnitVisible]);
 
   return (
     <View>
@@ -75,7 +68,17 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                 name="goalUnit"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
+                  <Picker
+                    selectedValue={value}
+                    onValueChange={(newValue) => {
+                      onChange(newValue);
+
+                      if (newValue === CUSTOM_KEY) {
+                        setGoalUnitVisible(true);
+                      }
+                    }}
+                    style={styles.picker}
+                  >
                     <Picker.Item label="minutes" value="minutes" />
                     <Picker.Item label="deciliters" value="deciliters" />
                     <Picker.Item label="pages" value="pages" />
@@ -106,10 +109,16 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       {errors.goalAmount && <Text style={styles.errorText}>{errors.goalAmount.message}</Text>}
       {errors.goalUnit && <Text style={styles.errorText}>{errors.goalUnit.message}</Text>}
       {errors.goalIntervalUnit && <Text style={styles.errorText}>{errors.goalIntervalUnit.message}</Text>}
+      <Text style={styles.heading}>Reminder</Text>
+      <Text>TODO</Text>
       <Button
         mode="contained"
         onPress={handleSubmit((formData) => {
-          console.log(formData);
+          const finalFormData = {
+            ...formData,
+            goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
+          };
+          console.log(finalFormData);
         })}
       >
         Save
