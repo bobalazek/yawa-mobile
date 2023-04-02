@@ -25,6 +25,7 @@
     "react-hook-form": "^7.43.9",
     "react-native": "0.71.4",
     "react-native-device-info": "^10.5.0",
+    "react-native-dialog": "^9.3.0",
     "react-native-keychain": "^8.1.1",
     "react-native-localize": "^2.2.6",
     "react-native-paper": "^5.5.1",

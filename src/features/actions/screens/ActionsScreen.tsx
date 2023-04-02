@@ -12,7 +12,7 @@ const ActionsScreen = ({ navigation }: Props) => {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.filtersWrapper}>
+        <View style={styles.filtersContainer}>
           <ActionsListFilters />
         </View>
         <ActionsList />
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
   },
-  filtersWrapper: {
+  filtersContainer: {
     marginBottom: 20,
   },
   fab: {

@@ -1,10 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Picker } from '@react-native-picker/picker';
+import { useEffect, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 
 import { ActionSchema, ActionType } from '../../schemas/ActionSchema';
-import ActionFormGoalType from './ActionFormGoalType';
+import ActionFromGoalIntervalUnitCustomDialog from './ActionFormGoalIntervalUnitCustomDialog';
+import ActionFormGoalTypeInput from './ActionFormGoalTypeInput';
+
+const CUSTOM_KEY = '__custom';
 
 const ActionForm = ({ data }: { data?: ActionType }) => {
   const {
@@ -17,90 +22,86 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       name: data?.name ?? '',
       goalType: data?.goalType ?? 'binary',
       goalAmount: data?.goalAmount ?? 30,
-      goalUnit: data?.goalUnit ?? 'min',
+      goalUnit: data?.goalUnit ?? 'minutes',
       goalIntervalUnit: data?.goalIntervalUnit ?? 'day',
     },
   });
   const goalType = useWatch({ control, name: 'goalType' });
+  const goalUnit = useWatch({ control, name: 'goalUnit' });
+  const [goalUnitVisible, setGoalUnitVisible] = useState(false);
+  const [goalUnitCustom, setGoalUnit] = useState('');
+
+  useEffect(() => {
+    if (goalUnit === CUSTOM_KEY && !goalUnitVisible) {
+      setGoalUnitVisible(true);
+    }
+  }, [goalUnit, goalUnitVisible]);
 
   return (
     <View>
-      {/* ========== Name ========== */}
-      <Controller
-        name="name"
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <View style={styles.buttonGroup}>
+      <View style={styles.inputGroup}>
+        <Controller
+          name="name"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
             <TextInput label="Name" value={value} onChangeText={onChange} onBlur={onBlur} />
-          </View>
-        )}
-      />
-      {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
-      {/* ========== Goal ========== */}
+          )}
+        />
+        {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+      </View>
       <Text style={styles.heading}>Goal</Text>
-      {/* ========== Goal - select ========== */}
-      <Text>TODO: add goal selector modal</Text>
-      {/* ========== Goal - Goal type ========== */}
-      <Controller
-        name="goalType"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.buttonGroup}>
-            <ActionFormGoalType value={value} onChange={onChange} />
-          </View>
-        )}
-      />
-      {errors.goalType && <Text style={styles.error}>{errors.goalType.message}</Text>}
-      {goalType !== 'binary' && (
-        <>
-          {/* ========== Goal - Goal amount ========== */}
+      <Text style={styles.inputGroup}>TODO: add goal selector modal</Text>
+      <View style={styles.inputGroup}>
+        <Controller
+          name="goalType"
+          control={control}
+          render={({ field: { onChange, value } }) => <ActionFormGoalTypeInput value={value} onChange={onChange} />}
+        />
+        {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
+      </View>
+      <View style={styles.inputGroup}>
+        <View style={styles.goalIntervalContainer}>
+          {goalType !== 'binary' && (
+            <>
+              <Controller
+                name="goalAmount"
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput keyboardType="numeric" value={value?.toString()} onChangeText={onChange} onBlur={onBlur} />
+                )}
+              />
+              <Controller
+                name="goalUnit"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
+                    <Picker.Item label="minutes" value="minutes" />
+                    <Picker.Item label="deciliters" value="deciliters" />
+                    <Picker.Item label="pages" value="pages" />
+                    <Picker.Item label={CUSTOM_KEY ? 'custom' : `${goalUnitCustom} (custom)`} value={CUSTOM_KEY} />
+                  </Picker>
+                )}
+              />
+              <Text style={styles.perText}>per</Text>
+            </>
+          )}
           <Controller
-            name="goalAmount"
+            name="goalIntervalUnit"
             control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View style={styles.buttonGroup}>
-                <TextInput
-                  label="Goal amount"
-                  keyboardType="numeric"
-                  value={value?.toString()}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              </View>
+            render={({ field: { onChange, value } }) => (
+              <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
+                <Picker.Item label="day" value="day" />
+                <Picker.Item label="week" value="week" />
+                <Picker.Item label="month" value="month" />
+                <Picker.Item label="year" value="year" />
+              </Picker>
             )}
           />
-          {errors.goalAmount && <Text style={styles.error}>{errors.goalAmount.message}</Text>}
-          {/* ========== Goal - Goal unit ========== */}
-          <Controller
-            name="goalUnit"
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View style={styles.buttonGroup}>
-                <TextInput label="Goal unit" value={value} onChangeText={onChange} onBlur={onBlur} />
-              </View>
-            )}
-          />
-          {errors.goalUnit && <Text style={styles.error}>{errors.goalUnit.message}</Text>}
-        </>
-      )}
-      {/* ========== Goal - Goal interval unit ========== */}
-      <Controller
-        name="goalIntervalUnit"
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <View style={styles.buttonGroup}>
-            <TextInput
-              label="Goal interval unit"
-              keyboardType="numeric"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-            />
-          </View>
-        )}
-      />
-      {errors.goalIntervalUnit && <Text style={styles.error}>{errors.goalIntervalUnit.message}</Text>}
-      {/* ========== Save button ========== */}
+        </View>
+      </View>
+      {errors.goalAmount && <Text style={styles.errorText}>{errors.goalAmount.message}</Text>}
+      {errors.goalUnit && <Text style={styles.errorText}>{errors.goalUnit.message}</Text>}
+      {errors.goalIntervalUnit && <Text style={styles.errorText}>{errors.goalIntervalUnit.message}</Text>}
       <Button
         mode="contained"
         onPress={handleSubmit((formData) => {
@@ -109,6 +110,18 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       >
         Save
       </Button>
+      <ActionFromGoalIntervalUnitCustomDialog
+        visible={goalUnitVisible}
+        title="Unit name"
+        inputLabel="What unit do you want to choose?"
+        onConfirmButton={(text) => {
+          setGoalUnit(text);
+          setGoalUnitVisible(false);
+        }}
+        onCancelButton={() => {
+          setGoalUnitVisible(false);
+        }}
+      />
     </View>
   );
 };
@@ -118,11 +131,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 5,
   },
-  buttonGroup: {
-    marginBottom: 10,
+  inputGroup: {
+    marginBottom: 20,
   },
-  error: {
+  errorText: {
     color: 'red',
+  },
+  picker: {
+    minWidth: 140,
+  },
+  perText: {
+    verticalAlign: 'middle',
+  },
+  goalIntervalContainer: {
+    flexDirection: 'row',
   },
 });
 
