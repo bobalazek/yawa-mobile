@@ -1,12 +1,12 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../../../store';
+import { ActionType } from '../schemas/ActionSchema';
 import actionsService from '../services/actionsService';
-import { ActionInterface } from '../types/ActionInterface';
 
 interface ActionsState {
   isLoading: boolean;
-  entries: ActionInterface[];
+  entries: ActionType[];
 }
 
 const initialState: ActionsState = {
@@ -21,7 +21,7 @@ const slice = createSlice({
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
-    setEntries: (state, action: PayloadAction<ActionInterface[]>) => {
+    setEntries: (state, action: PayloadAction<ActionType[]>) => {
       state.entries = action.payload;
     },
   },

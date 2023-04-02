@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
-const ActionFormGoalType = ({ value, onChange }: { value: string; onChange: (newValue: string) => void }) => {
+const ActionFormGoalType = ({ value, onChange }: { value?: string; onChange: (newValue: string) => void }) => {
   return (
     <View>
       <Text style={styles.label}>Goal type</Text>
