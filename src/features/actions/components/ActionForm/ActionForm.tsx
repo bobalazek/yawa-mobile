@@ -1,9 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Picker } from '@react-native-picker/picker';
+import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
+import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonGroup from '../../../../components/ui/ButtonGroup/ButtonGroup';
 import SwitchWithLabel from '../../../../components/ui/SwitchWithLabel/SwitchWithLabel';
@@ -11,6 +14,26 @@ import { ActionSchema, ActionType } from '../../schemas/ActionSchema';
 import ActionFromGoalIntervalUnitCustomDialog from './ActionFormGoalIntervalUnitCustomDialog';
 
 const CUSTOM_KEY = '__custom';
+const GOAL_TYPES_OPTIONS = [
+  { key: 'binary', label: 'Yes/No' },
+  { key: 'measurable', label: 'Measurable' },
+];
+const GOAL_UNIT_OPTIONS = [
+  { key: 'minutes', label: 'Minutes' },
+  { key: 'deciliters', label: 'Deciliters' },
+  { key: 'pages', label: 'Pages' },
+];
+const GOAL_INTERVAL_UNITS_OPTIONS = [
+  { key: 'day', label: 'Day' },
+  { key: 'week', label: 'Week' },
+  { key: 'month', label: 'Month' },
+  { key: 'year', label: 'Year' },
+];
+const REMINDER_INTERVAL_TYPE_OPTIONS = [
+  { key: 'only_once', label: 'Only once' },
+  { key: 'recurring_every_x_y', label: 'Recurring every X Y' },
+  { key: 'recurring_x_times_per_y', label: 'Recurring X times per Y' },
+];
 
 const ActionForm = ({ data }: { data?: ActionType }) => {
   const {
@@ -28,170 +51,258 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       goalIntervalUnit: data?.goalIntervalUnit ?? 'day',
       reminderEnabled: false,
       reminderIntervalType: data?.reminderIntervalType ?? 'only_once',
+      reminderStartTime: data?.reminderStartTime ?? '',
+      reminderEndTime: data?.reminderEndTime ?? '',
+      reminderOnlyOnceDate: data?.reminderOnlyOnceDate ?? '',
     },
   });
   const goalType = useWatch({ control, name: 'goalType' });
   const reminderEnabled = useWatch({ control, name: 'reminderEnabled' });
-  const [goalUnitVisible, setGoalUnitVisible] = useState(false);
+  const reminderIntervalType = useWatch({ control, name: 'reminderIntervalType' });
+  const reminderOnlyOnceDate = useWatch({ control, name: 'reminderOnlyOnceDate' });
+  const reminderStartTime = useWatch({ control, name: 'reminderStartTime' });
+  const reminderEndTime = useWatch({ control, name: 'reminderEndTime' });
   const [goalUnitCustom, setGoalUnitCustom] = useState('');
+  const [goalUnitDialogVisible, setGoalUnitDialogVisible] = useState(false);
+  const [reminderOnlyOnceDateDialogVisible, setReminderOnlyOnceDateDialogVisible] = useState(false);
+  const [reminderStartTimeDialogVisible, setReminderStartTimeDialogVisible] = useState(false);
+  const [reminderEndTimeDialogVisible, setReminderEndTimeDialogVisible] = useState(false);
 
   return (
-    <View>
-      <View style={styles.inputGroup}>
-        <Controller
-          name="name"
-          control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput label="Name" value={value} onChangeText={onChange} onBlur={onBlur} />
-          )}
-        />
-        {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
-      </View>
-      <Text style={styles.heading}>Goal</Text>
-      <Text style={styles.inputGroup}>TODO: add goal selector modal</Text>
-      <View style={styles.inputGroup}>
-        <Controller
-          name="goalType"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <ButtonGroup
-              value={value}
-              onChange={onChange}
-              options={[
-                { key: 'binary', label: 'Yes/No' },
-                { key: 'measurable', label: 'Measurable' },
-              ]}
-            />
-          )}
-        />
-        {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
-      </View>
-      <View style={styles.inputGroup}>
-        <View style={styles.goalIntervalContainer}>
-          {goalType !== 'binary' && (
-            <>
-              <Controller
-                name="goalAmount"
-                control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    value={value?.toString() ?? '0'}
-                    onChangeText={(newValue) => onChange(parseInt(newValue, 10) || 0)}
-                    onBlur={onBlur}
-                    keyboardType="numeric"
-                    maxLength={3}
-                  />
-                )}
-              />
-              <Controller
-                name="goalUnit"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Picker
-                    selectedValue={value}
-                    onValueChange={(newValue) => {
-                      onChange(newValue);
-
-                      if (newValue === CUSTOM_KEY) {
-                        setGoalUnitVisible(true);
-                      }
-                    }}
-                    style={styles.picker}
-                  >
-                    <Picker.Item label="minutes" value="minutes" />
-                    <Picker.Item label="deciliters" value="deciliters" />
-                    <Picker.Item label="pages" value="pages" />
-                    <Picker.Item
-                      label={goalUnitCustom ? `${goalUnitCustom} (edit custom)` : 'custom'}
-                      value={CUSTOM_KEY}
-                    />
-                  </Picker>
-                )}
-              />
-            </>
-          )}
-          <Text style={styles.perText}>per</Text>
+    <SafeAreaView>
+      <ScrollView>
+        <View style={styles.inputGroup}>
           <Controller
-            name="goalIntervalUnit"
+            name="name"
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput label="Name" value={value} onChangeText={onChange} onBlur={onBlur} />
+            )}
+          />
+          {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
+        </View>
+        <Text style={styles.heading}>Goal</Text>
+        <Text style={styles.inputGroup}>TODO: add goal selector modal</Text>
+        <View style={styles.inputGroup}>
+          <Controller
+            name="goalType"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
-                <Picker.Item label="day" value="day" />
-                <Picker.Item label="week" value="week" />
-                <Picker.Item label="month" value="month" />
-                <Picker.Item label="year" value="year" />
-              </Picker>
+              <ButtonGroup value={value} onChange={onChange} options={GOAL_TYPES_OPTIONS} />
+            )}
+          />
+          {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
+        </View>
+        <View style={styles.inputGroup}>
+          <View style={styles.goalIntervalContainer}>
+            {goalType !== 'binary' && (
+              <>
+                <Controller
+                  name="goalAmount"
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      value={value?.toString() ?? '0'}
+                      onChangeText={(newValue) => onChange(parseInt(newValue, 10) || 0)}
+                      onBlur={onBlur}
+                      keyboardType="numeric"
+                      maxLength={3}
+                    />
+                  )}
+                />
+                <Controller
+                  name="goalUnit"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <Picker
+                      selectedValue={value}
+                      onValueChange={(newValue) => {
+                        onChange(newValue);
+
+                        if (newValue === CUSTOM_KEY) {
+                          setGoalUnitDialogVisible(true);
+                        }
+                      }}
+                      style={styles.picker}
+                    >
+                      {GOAL_UNIT_OPTIONS.map(({ key, label }) => (
+                        <Picker.Item key={key} label={label} value={key} />
+                      ))}
+                      <Picker.Item
+                        label={goalUnitCustom ? `${goalUnitCustom} (edit custom)` : 'custom'}
+                        value={CUSTOM_KEY}
+                      />
+                    </Picker>
+                  )}
+                />
+              </>
+            )}
+            <Text style={styles.perText}>per</Text>
+            <Controller
+              name="goalIntervalUnit"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
+                  {GOAL_INTERVAL_UNITS_OPTIONS.map(({ key, label }) => (
+                    <Picker.Item key={key} label={label} value={key} />
+                  ))}
+                </Picker>
+              )}
+            />
+          </View>
+          {errors.goalAmount && <Text style={styles.errorText}>{errors.goalAmount.message}</Text>}
+          {errors.goalUnit && <Text style={styles.errorText}>{errors.goalUnit.message}</Text>}
+          {errors.goalIntervalUnit && <Text style={styles.errorText}>{errors.goalIntervalUnit.message}</Text>}
+        </View>
+        <Text style={styles.heading}>Reminder</Text>
+        <View style={styles.inputGroup}>
+          <Controller
+            name="reminderEnabled"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <SwitchWithLabel label="Enabled" value={!!value} onValueChange={onChange} />
             )}
           />
         </View>
-      </View>
-      {errors.goalAmount && <Text style={styles.errorText}>{errors.goalAmount.message}</Text>}
-      {errors.goalUnit && <Text style={styles.errorText}>{errors.goalUnit.message}</Text>}
-      {errors.goalIntervalUnit && <Text style={styles.errorText}>{errors.goalIntervalUnit.message}</Text>}
-      <Text style={styles.heading}>Reminder</Text>
-      <View style={styles.inputGroup}>
-        <Controller
-          name="reminderEnabled"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <SwitchWithLabel label="Enabled" value={!!value} onValueChange={onChange} />
-          )}
-        />
-      </View>
-      {reminderEnabled && (
-        <>
-          <View style={styles.inputGroup}>
-            <Controller
-              name="reminderIntervalType"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <ButtonGroup
-                  value={value}
-                  onChange={onChange}
-                  options={[
-                    { key: 'only_once', label: 'Only once' },
-                    { key: 'recurring_every_x_y', label: 'Recurring every X Y' },
-                    { key: 'recurring_x_times_per_y', label: 'Recurring X times per Y' },
-                  ]}
-                />
+        {reminderEnabled && (
+          <>
+            <View style={styles.inputGroup}>
+              <Controller
+                name="reminderIntervalType"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <ButtonGroup value={value} onChange={onChange} options={REMINDER_INTERVAL_TYPE_OPTIONS} />
+                )}
+              />
+              {errors.reminderIntervalType && (
+                <Text style={styles.errorText}>{errors.reminderIntervalType.message}</Text>
               )}
-            />
-            {errors.reminderIntervalType && <Text style={styles.errorText}>{errors.reminderIntervalType.message}</Text>}
-          </View>
-        </>
-      )}
+            </View>
+            {reminderIntervalType === 'only_once' && (
+              <View style={[styles.inputGroup, styles.leftAligned]}>
+                <Text>Date</Text>
+                <Button
+                  icon="calendar"
+                  mode="outlined"
+                  onPress={() => {
+                    setReminderOnlyOnceDateDialogVisible(true);
+                  }}
+                >
+                  {reminderOnlyOnceDate || '(edit)'}
+                </Button>
+              </View>
+            )}
+            <View style={[styles.inputGroup, styles.leftAligned]}>
+              <Text>Start time</Text>
+              <Button
+                icon="clock"
+                mode="outlined"
+                onPress={() => {
+                  setReminderStartTimeDialogVisible(true);
+                }}
+              >
+                {reminderStartTime || '(edit)'}
+              </Button>
+            </View>
+            <View style={[styles.inputGroup, styles.leftAligned]}>
+              <Text>End time</Text>
+              <Button
+                icon="clock"
+                mode="outlined"
+                onPress={() => {
+                  setReminderEndTimeDialogVisible(true);
+                }}
+              >
+                {reminderEndTime || '(edit)'}
+              </Button>
+            </View>
+          </>
+        )}
+        <Button
+          mode="contained"
+          onPress={handleSubmit((formData) => {
+            const finalFormData = {
+              ...formData,
+              goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
+            };
+            console.log(finalFormData);
+          })}
+        >
+          Save
+        </Button>
+        <ActionFromGoalIntervalUnitCustomDialog
+          visible={goalUnitDialogVisible}
+          title="Custom name"
+          inputLabel="What unit do you want to choose?"
+          onConfirmButton={(text) => {
+            if (text) {
+              setGoalUnitCustom(text);
+            } else {
+              setValue('goalUnit', 'minutes', { shouldDirty: true });
+            }
 
-      <Button
-        mode="contained"
-        onPress={handleSubmit((formData) => {
-          const finalFormData = {
-            ...formData,
-            goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
-          };
-          console.log(finalFormData);
-        })}
-      >
-        Save
-      </Button>
-      <ActionFromGoalIntervalUnitCustomDialog
-        visible={goalUnitVisible}
-        title="Custom name"
-        inputLabel="What unit do you want to choose?"
-        onConfirmButton={(text) => {
-          if (text) {
-            setGoalUnitCustom(text);
-          } else {
+            setGoalUnitDialogVisible(false);
+          }}
+          onCancelButton={() => {
             setValue('goalUnit', 'minutes', { shouldDirty: true });
-          }
-
-          setGoalUnitVisible(false);
-        }}
-        onCancelButton={() => {
-          setValue('goalUnit', 'minutes', { shouldDirty: true });
-          setGoalUnitVisible(false);
-        }}
-      />
-    </View>
+            setGoalUnitDialogVisible(false);
+          }}
+        />
+        <DatePickerModal
+          locale="en"
+          mode="single"
+          visible={reminderOnlyOnceDateDialogVisible}
+          date={reminderOnlyOnceDate ? new Date(reminderOnlyOnceDate) : undefined}
+          onDismiss={() => {
+            setReminderOnlyOnceDateDialogVisible(false);
+          }}
+          onConfirm={(value) => {
+            setValue(
+              'reminderOnlyOnceDate',
+              value.date ? DateTime.fromJSDate(value.date).toFormat('yyyy-MM-dd') : undefined,
+              {
+                shouldDirty: true,
+              }
+            );
+            setReminderOnlyOnceDateDialogVisible(false);
+          }}
+        />
+        <TimePickerModal
+          locale="en"
+          visible={reminderStartTimeDialogVisible}
+          onDismiss={() => {
+            setReminderStartTimeDialogVisible(false);
+          }}
+          onConfirm={(hoursAndMinutes) => {
+            setValue(
+              'reminderStartTime',
+              hoursAndMinutes ? `${hoursAndMinutes.hours}:${hoursAndMinutes.minutes}` : undefined,
+              {
+                shouldDirty: true,
+              }
+            );
+            setReminderStartTimeDialogVisible(false);
+          }}
+        />
+        <TimePickerModal
+          locale="en"
+          visible={reminderEndTimeDialogVisible}
+          onDismiss={() => {
+            setReminderEndTimeDialogVisible(false);
+          }}
+          onConfirm={(hoursAndMinutes) => {
+            setValue(
+              'reminderEndTime',
+              hoursAndMinutes ? `${hoursAndMinutes.hours}:${hoursAndMinutes.minutes}` : undefined,
+              {
+                shouldDirty: true,
+              }
+            );
+            setReminderEndTimeDialogVisible(false);
+          }}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -211,6 +322,9 @@ const styles = StyleSheet.create({
   },
   perText: {
     verticalAlign: 'middle',
+  },
+  leftAligned: {
+    alignItems: 'flex-start',
   },
   goalIntervalContainer: {
     flexDirection: 'row',
