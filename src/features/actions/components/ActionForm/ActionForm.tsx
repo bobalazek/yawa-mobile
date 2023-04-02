@@ -5,9 +5,10 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 
+import ButtonGroup from '../../../../components/ui/ButtonGroup/ButtonGroup';
+import SwitchWithLabel from '../../../../components/ui/SwitchWithLabel/SwitchWithLabel';
 import { ActionSchema, ActionType } from '../../schemas/ActionSchema';
 import ActionFromGoalIntervalUnitCustomDialog from './ActionFormGoalIntervalUnitCustomDialog';
-import ActionFormGoalTypeInput from './ActionFormGoalTypeInput';
 
 const CUSTOM_KEY = '__custom';
 
@@ -25,9 +26,12 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       goalAmount: data?.goalAmount ?? 30,
       goalUnit: data?.goalUnit ?? 'minutes',
       goalIntervalUnit: data?.goalIntervalUnit ?? 'day',
+      reminderEnabled: false,
+      reminderIntervalType: data?.reminderIntervalType ?? 'only_once',
     },
   });
   const goalType = useWatch({ control, name: 'goalType' });
+  const reminderEnabled = useWatch({ control, name: 'reminderEnabled' });
   const [goalUnitVisible, setGoalUnitVisible] = useState(false);
   const [goalUnitCustom, setGoalUnitCustom] = useState('');
 
@@ -49,7 +53,16 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
         <Controller
           name="goalType"
           control={control}
-          render={({ field: { onChange, value } }) => <ActionFormGoalTypeInput value={value} onChange={onChange} />}
+          render={({ field: { onChange, value } }) => (
+            <ButtonGroup
+              value={value}
+              onChange={onChange}
+              options={[
+                { key: 'binary', label: 'Yes/No' },
+                { key: 'measurable', label: 'Measurable' },
+              ]}
+            />
+          )}
         />
         {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
       </View>
@@ -61,7 +74,13 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                 name="goalAmount"
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput keyboardType="numeric" value={value?.toString()} onChangeText={onChange} onBlur={onBlur} />
+                  <TextInput
+                    value={value?.toString() ?? '0'}
+                    onChangeText={(newValue) => onChange(parseInt(newValue, 10) || 0)}
+                    onBlur={onBlur}
+                    keyboardType="numeric"
+                    maxLength={3}
+                  />
                 )}
               />
               <Controller
@@ -89,9 +108,9 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                   </Picker>
                 )}
               />
-              <Text style={styles.perText}>per</Text>
             </>
           )}
+          <Text style={styles.perText}>per</Text>
           <Controller
             name="goalIntervalUnit"
             control={control}
@@ -110,7 +129,38 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       {errors.goalUnit && <Text style={styles.errorText}>{errors.goalUnit.message}</Text>}
       {errors.goalIntervalUnit && <Text style={styles.errorText}>{errors.goalIntervalUnit.message}</Text>}
       <Text style={styles.heading}>Reminder</Text>
-      <Text>TODO</Text>
+      <View style={styles.inputGroup}>
+        <Controller
+          name="reminderEnabled"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <SwitchWithLabel label="Enabled" value={!!value} onValueChange={onChange} />
+          )}
+        />
+      </View>
+      {reminderEnabled && (
+        <>
+          <View style={styles.inputGroup}>
+            <Controller
+              name="reminderIntervalType"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <ButtonGroup
+                  value={value}
+                  onChange={onChange}
+                  options={[
+                    { key: 'only_once', label: 'Only once' },
+                    { key: 'recurring_every_x_y', label: 'Recurring every X Y' },
+                    { key: 'recurring_x_times_per_y', label: 'Recurring X times per Y' },
+                  ]}
+                />
+              )}
+            />
+            {errors.reminderIntervalType && <Text style={styles.errorText}>{errors.reminderIntervalType.message}</Text>}
+          </View>
+        </>
+      )}
+
       <Button
         mode="contained"
         onPress={handleSubmit((formData) => {
@@ -164,6 +214,7 @@ const styles = StyleSheet.create({
   },
   goalIntervalContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
