@@ -16,6 +16,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ActionType>({
     resolver: zodResolver(ActionSchema),
     defaultValues: {
@@ -29,7 +30,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
   const goalType = useWatch({ control, name: 'goalType' });
   const goalUnit = useWatch({ control, name: 'goalUnit' });
   const [goalUnitVisible, setGoalUnitVisible] = useState(false);
-  const [goalUnitCustom, setGoalUnit] = useState('');
+  const [goalUnitCustom, setGoalUnitCustom] = useState('');
 
   useEffect(() => {
     if (goalUnit === CUSTOM_KEY && !goalUnitVisible) {
@@ -78,7 +79,10 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                     <Picker.Item label="minutes" value="minutes" />
                     <Picker.Item label="deciliters" value="deciliters" />
                     <Picker.Item label="pages" value="pages" />
-                    <Picker.Item label={CUSTOM_KEY ? 'custom' : `${goalUnitCustom} (custom)`} value={CUSTOM_KEY} />
+                    <Picker.Item
+                      label={goalUnitCustom ? `${goalUnitCustom} (edit custom)` : 'custom'}
+                      value={CUSTOM_KEY}
+                    />
                   </Picker>
                 )}
               />
@@ -112,13 +116,19 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       </Button>
       <ActionFromGoalIntervalUnitCustomDialog
         visible={goalUnitVisible}
-        title="Unit name"
+        title="Custom name"
         inputLabel="What unit do you want to choose?"
         onConfirmButton={(text) => {
-          setGoalUnit(text);
+          if (text) {
+            setGoalUnitCustom(text);
+          } else {
+            setValue('goalUnit', 'minutes', { shouldDirty: true });
+          }
+
           setGoalUnitVisible(false);
         }}
         onCancelButton={() => {
+          setValue('goalUnit', 'minutes', { shouldDirty: true });
           setGoalUnitVisible(false);
         }}
       />
