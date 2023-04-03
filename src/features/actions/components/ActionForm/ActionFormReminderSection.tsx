@@ -75,9 +75,11 @@ const ActionFormReminderSection = ({
           {reminderIntervalType !== 'only_once' && (
             <View style={styles.inputGroup}>
               <View style={styles.rowContainer}>
-                <Text style={styles.fillerText}>
-                  {reminderIntervalType === 'recurring_every_x_y' ? 'Recurring every' : 'Recurring'}
-                </Text>
+                <View style={styles.fillerViewStart}>
+                  <Text style={styles.fillerText}>
+                    {reminderIntervalType === 'recurring_every_x_y' ? 'Recurring every' : 'Recurring'}
+                  </Text>
+                </View>
                 <Controller
                   name="reminderRecurrenceIntervalAmount"
                   control={control}
@@ -91,7 +93,11 @@ const ActionFormReminderSection = ({
                     />
                   )}
                 />
-                {reminderIntervalType === 'recurring_x_times_per_y' && <Text style={styles.fillerText}>times per</Text>}
+                {reminderIntervalType === 'recurring_x_times_per_y' && (
+                  <View style={styles.fillerViewMiddle}>
+                    <Text style={styles.fillerText}>times per</Text>
+                  </View>
+                )}
                 <Controller
                   name="reminderRecurrenceIntervalUnit"
                   control={control}
@@ -263,6 +269,14 @@ const styles = StyleSheet.create({
   },
   picker: {
     minWidth: 140,
+  },
+  fillerViewStart: {
+    paddingRight: 10,
+    justifyContent: 'center',
+  },
+  fillerViewMiddle: {
+    paddingHorizontal: 10,
+    justifyContent: 'center',
   },
   fillerText: {
     verticalAlign: 'middle',
