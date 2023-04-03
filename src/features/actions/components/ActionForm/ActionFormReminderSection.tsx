@@ -190,9 +190,6 @@ const styles = StyleSheet.create({
   picker: {
     minWidth: 140,
   },
-  perText: {
-    verticalAlign: 'middle',
-  },
   leftAligned: {
     alignItems: 'flex-start',
     marginHorizontal: 2,

@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
@@ -31,6 +32,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       reminderOnlyOnceDate: data?.reminderOnlyOnceDate ?? '',
     },
   });
+  const [goalUnitCustom, setGoalUnitCustom] = useState('');
 
   return (
     <SafeAreaView>
@@ -45,13 +47,23 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
           />
           {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
         </View>
-        <ActionFormGoalSection control={control} errors={errors} setValue={setValue} />
+        <ActionFormGoalSection
+          control={control}
+          errors={errors}
+          setValue={setValue}
+          goalUnitCustom={goalUnitCustom}
+          setGoalUnitCustom={setGoalUnitCustom}
+        />
         <ActionFormReminderSection control={control} errors={errors} setValue={setValue} />
         <Button
           mode="contained"
           onPress={handleSubmit((formData) => {
-            // TODO: goal unit custom
-            console.log(formData);
+            const finalFormData = {
+              ...formData,
+              goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
+            };
+
+            console.log(finalFormData);
           })}
         >
           Save
@@ -62,10 +74,6 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
 };
 
 const styles = StyleSheet.create({
-  heading: {
-    fontSize: 20,
-    marginBottom: 5,
-  },
   inputGroup: {
     marginBottom: 20,
   },
@@ -74,19 +82,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-  },
-  picker: {
-    minWidth: 140,
-  },
-  perText: {
-    verticalAlign: 'middle',
-  },
-  leftAligned: {
-    alignItems: 'flex-start',
-    marginHorizontal: 2,
-  },
-  rowContainer: {
-    flexDirection: 'row',
   },
 });
 

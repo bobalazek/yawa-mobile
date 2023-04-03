@@ -1,4 +1,5 @@
 import { Picker } from '@react-native-picker/picker';
+import React from 'react';
 import { useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
@@ -29,13 +30,17 @@ const ActionFormGoalSection = ({
   control,
   errors,
   setValue,
+  goalUnitCustom,
+  setGoalUnitCustom,
 }: {
   control: Control<ActionType>;
   errors: FieldErrors<ActionType>;
   setValue: UseFormSetValue<ActionType>;
+  goalUnitCustom: string;
+  setGoalUnitCustom: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const goalType = useWatch({ control, name: 'goalType' });
-  const [goalUnitCustom, setGoalUnitCustom] = useState('');
+
   const [goalUnitDialogVisible, setGoalUnitDialogVisible] = useState(false);
 
   return (
@@ -154,10 +159,6 @@ const styles = StyleSheet.create({
   },
   perText: {
     verticalAlign: 'middle',
-  },
-  leftAligned: {
-    alignItems: 'flex-start',
-    marginHorizontal: 2,
   },
   rowContainer: {
     flexDirection: 'row',
