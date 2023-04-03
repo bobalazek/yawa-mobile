@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
+    fontSize: 12,
     marginRight: 8,
   },
 });

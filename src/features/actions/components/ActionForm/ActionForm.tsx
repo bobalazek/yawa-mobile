@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ButtonGroup from '../../../../components/ui/ButtonGroup/ButtonGroup';
 import SwitchWithLabel from '../../../../components/ui/SwitchWithLabel/SwitchWithLabel';
+import { padLeft } from '../../../../utils/helpers';
 import { ActionSchema, ActionType } from '../../schemas/ActionSchema';
 import ActionFromGoalIntervalUnitCustomDialog from './ActionFormGoalIntervalUnitCustomDialog';
 
@@ -19,15 +20,15 @@ const GOAL_TYPES_OPTIONS = [
   { key: 'measurable', label: 'Measurable' },
 ];
 const GOAL_UNIT_OPTIONS = [
-  { key: 'minutes', label: 'Minutes' },
-  { key: 'deciliters', label: 'Deciliters' },
-  { key: 'pages', label: 'Pages' },
+  { key: 'minutes', label: 'minutes' },
+  { key: 'deciliters', label: 'deciliters' },
+  { key: 'pages', label: 'pages read' },
 ];
 const GOAL_INTERVAL_UNITS_OPTIONS = [
-  { key: 'day', label: 'Day' },
-  { key: 'week', label: 'Week' },
-  { key: 'month', label: 'Month' },
-  { key: 'year', label: 'Year' },
+  { key: 'day', label: 'day' },
+  { key: 'week', label: 'deek' },
+  { key: 'month', label: 'month' },
+  { key: 'year', label: 'year' },
 ];
 const REMINDER_INTERVAL_TYPE_OPTIONS = [
   { key: 'only_once', label: 'Only once' },
@@ -88,13 +89,13 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
             name="goalType"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <ButtonGroup value={value} onChange={onChange} options={GOAL_TYPES_OPTIONS} />
+              <ButtonGroup label="Goal type" value={value} onChange={onChange} options={GOAL_TYPES_OPTIONS} />
             )}
           />
           {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
         </View>
         <View style={styles.inputGroup}>
-          <View style={styles.goalIntervalContainer}>
+          <View style={styles.rowContainer}>
             {goalType !== 'binary' && (
               <>
                 <Controller
@@ -137,7 +138,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                 />
               </>
             )}
-            <Text style={styles.perText}>per</Text>
+            <Text style={styles.perText}>{goalType === 'binary' ? 'Once per' : 'per'}</Text>
             <Controller
               name="goalIntervalUnit"
               control={control}
@@ -171,50 +172,59 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                 name="reminderIntervalType"
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                  <ButtonGroup value={value} onChange={onChange} options={REMINDER_INTERVAL_TYPE_OPTIONS} />
+                  <ButtonGroup
+                    label="Interval type"
+                    value={value}
+                    onChange={onChange}
+                    options={REMINDER_INTERVAL_TYPE_OPTIONS}
+                  />
                 )}
               />
               {errors.reminderIntervalType && (
                 <Text style={styles.errorText}>{errors.reminderIntervalType.message}</Text>
               )}
             </View>
-            {reminderIntervalType === 'only_once' && (
-              <View style={[styles.inputGroup, styles.leftAligned]}>
-                <Text>Date</Text>
+            <View style={[styles.inputGroup, styles.rowContainer]}>
+              {reminderIntervalType === 'only_once' && (
+                <View style={styles.leftAligned}>
+                  <Text>Date</Text>
+                  <Button
+                    icon="calendar"
+                    mode="outlined"
+                    onPress={() => {
+                      setReminderOnlyOnceDateDialogVisible(true);
+                    }}
+                  >
+                    {reminderOnlyOnceDate || '(edit)'}
+                  </Button>
+                </View>
+              )}
+              <View style={styles.leftAligned}>
+                <Text>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
                 <Button
-                  icon="calendar"
+                  icon="clock"
                   mode="outlined"
                   onPress={() => {
-                    setReminderOnlyOnceDateDialogVisible(true);
+                    setReminderStartTimeDialogVisible(true);
                   }}
                 >
-                  {reminderOnlyOnceDate || '(edit)'}
+                  {reminderStartTime || '(edit)'}
                 </Button>
               </View>
-            )}
-            <View style={[styles.inputGroup, styles.leftAligned]}>
-              <Text>Start time</Text>
-              <Button
-                icon="clock"
-                mode="outlined"
-                onPress={() => {
-                  setReminderStartTimeDialogVisible(true);
-                }}
-              >
-                {reminderStartTime || '(edit)'}
-              </Button>
-            </View>
-            <View style={[styles.inputGroup, styles.leftAligned]}>
-              <Text>End time</Text>
-              <Button
-                icon="clock"
-                mode="outlined"
-                onPress={() => {
-                  setReminderEndTimeDialogVisible(true);
-                }}
-              >
-                {reminderEndTime || '(edit)'}
-              </Button>
+              {reminderIntervalType !== 'only_once' && (
+                <View style={styles.leftAligned}>
+                  <Text>End time</Text>
+                  <Button
+                    icon="clock"
+                    mode="outlined"
+                    onPress={() => {
+                      setReminderEndTimeDialogVisible(true);
+                    }}
+                  >
+                    {reminderEndTime || '(edit)'}
+                  </Button>
+                </View>
+              )}
             </View>
           </>
         )}
@@ -269,6 +279,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
         />
         <TimePickerModal
           locale="en"
+          use24HourClock={true}
           visible={reminderStartTimeDialogVisible}
           onDismiss={() => {
             setReminderStartTimeDialogVisible(false);
@@ -276,7 +287,9 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
           onConfirm={(hoursAndMinutes) => {
             setValue(
               'reminderStartTime',
-              hoursAndMinutes ? `${hoursAndMinutes.hours}:${hoursAndMinutes.minutes}` : undefined,
+              hoursAndMinutes
+                ? `${padLeft(hoursAndMinutes.hours, 2)}:${padLeft(hoursAndMinutes.minutes, 2)}`
+                : undefined,
               {
                 shouldDirty: true,
               }
@@ -286,6 +299,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
         />
         <TimePickerModal
           locale="en"
+          use24HourClock={true}
           visible={reminderEndTimeDialogVisible}
           onDismiss={() => {
             setReminderEndTimeDialogVisible(false);
@@ -293,7 +307,9 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
           onConfirm={(hoursAndMinutes) => {
             setValue(
               'reminderEndTime',
-              hoursAndMinutes ? `${hoursAndMinutes.hours}:${hoursAndMinutes.minutes}` : undefined,
+              hoursAndMinutes
+                ? `${padLeft(hoursAndMinutes.hours, 2)}:${padLeft(hoursAndMinutes.minutes, 2)}`
+                : undefined,
               {
                 shouldDirty: true,
               }
@@ -325,10 +341,10 @@ const styles = StyleSheet.create({
   },
   leftAligned: {
     alignItems: 'flex-start',
+    marginHorizontal: 2,
   },
-  goalIntervalContainer: {
+  rowContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
   },
 });
 

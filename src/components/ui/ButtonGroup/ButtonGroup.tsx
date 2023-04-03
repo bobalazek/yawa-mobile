@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 
 interface ButtonGroupOption {
   key: string;
@@ -7,39 +7,43 @@ interface ButtonGroupOption {
 }
 
 interface ButtonGroupProps {
+  label?: string;
   value?: string;
   onChange: (newValue: string) => void;
   options: ButtonGroupOption[];
 }
 
-const ButtonGroup = ({ value, onChange, options }: ButtonGroupProps) => {
+const ButtonGroup = ({ label, value, onChange, options }: ButtonGroupProps) => {
   return (
-    <View style={styles.container}>
-      {options.map((option) => (
-        <Button
-          compact
-          key={option.key}
-          mode={value === option.key ? 'contained' : 'outlined'}
-          onPress={() => {
-            onChange(option.key);
-          }}
-          style={styles.button}
-          contentStyle={styles.buttonContent}
-          labelStyle={styles.buttonLabel}
-        >
-          {option.label}
-        </Button>
-      ))}
+    <View>
+      {label && <Text style={styles.label}>{label}</Text>}
+      <View style={styles.optionsContainer}>
+        {options.map((option) => (
+          <Button
+            compact
+            key={option.key}
+            mode={value === option.key ? 'contained' : 'outlined'}
+            onPress={() => {
+              onChange(option.key);
+            }}
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+            labelStyle={styles.buttonLabel}
+          >
+            {option.label}
+          </Button>
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  optionsContainer: {
     flexDirection: 'row',
   },
   label: {
-    fontSize: 14,
+    fontSize: 12,
     marginBottom: 5,
   },
   button: {
