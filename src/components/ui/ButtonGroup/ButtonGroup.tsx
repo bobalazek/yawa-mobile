@@ -17,7 +17,7 @@ const ButtonGroup = ({ label, value, onChange, options }: ButtonGroupProps) => {
   return (
     <View>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={styles.optionsContainer}>
+      <View style={styles.rowContainer}>
         {options.map((option) => (
           <Button
             compact
@@ -39,8 +39,9 @@ const ButtonGroup = ({ label, value, onChange, options }: ButtonGroupProps) => {
 };
 
 const styles = StyleSheet.create({
-  optionsContainer: {
+  rowContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   label: {
     fontSize: 12,

@@ -101,7 +101,7 @@ const ActionFormGoalSection = ({
               />
             </>
           )}
-          <Text style={styles.perText}>{goalType === 'binary' ? 'Once per' : 'per'}</Text>
+          <Text style={styles.fillerText}>{goalType === 'binary' ? 'Once per' : 'per'}</Text>
           <Controller
             name="goalIntervalUnit"
             control={control}
@@ -157,11 +157,12 @@ const styles = StyleSheet.create({
   picker: {
     minWidth: 140,
   },
-  perText: {
+  fillerText: {
     verticalAlign: 'middle',
   },
   rowContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 

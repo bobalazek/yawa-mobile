@@ -19,6 +19,7 @@ const SwitchWithLabel = (props: SwitchPropsWithLabel) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
   },
   label: {

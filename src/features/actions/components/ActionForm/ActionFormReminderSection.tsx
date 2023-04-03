@@ -1,8 +1,9 @@
+import { Picker } from '@react-native-picker/picker';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Text, TextInput } from 'react-native-paper';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 
 import ButtonGroup from '../../../../components/ui/ButtonGroup/ButtonGroup';
@@ -33,10 +34,12 @@ const ActionFormReminderSection = ({
 }) => {
   const reminderEnabled = useWatch({ control, name: 'reminderEnabled' });
   const reminderIntervalType = useWatch({ control, name: 'reminderIntervalType' });
-  const reminderOnlyOnceDate = useWatch({ control, name: 'reminderOnlyOnceDate' });
+  const reminderStartDate = useWatch({ control, name: 'reminderStartDate' });
+  const reminderEndDate = useWatch({ control, name: 'reminderEndDate' });
   const reminderStartTime = useWatch({ control, name: 'reminderStartTime' });
   const reminderEndTime = useWatch({ control, name: 'reminderEndTime' });
-  const [reminderOnlyOnceDateDialogVisible, setReminderOnlyOnceDateDialogVisible] = useState(false);
+  const [reminderStartDateDialogVisible, setReminderStartDateDialogVisible] = useState(false);
+  const [reminderEndDateDialogVisible, setReminderEndDateDialogVisible] = useState(false);
   const [reminderStartTimeDialogVisible, setReminderStartTimeDialogVisible] = useState(false);
   const [reminderEndTimeDialogVisible, setReminderEndTimeDialogVisible] = useState(false);
 
@@ -69,70 +72,107 @@ const ActionFormReminderSection = ({
             />
             {errors.reminderIntervalType && <Text style={styles.errorText}>{errors.reminderIntervalType.message}</Text>}
           </View>
-          <View style={[styles.inputGroup, styles.rowContainer]}>
-            {reminderIntervalType === 'only_once' && (
-              <View style={styles.leftAligned}>
-                <Text style={styles.label}>Date</Text>
+          {reminderIntervalType !== 'only_once' && (
+            <View style={styles.inputGroup}>
+              <View style={styles.rowContainer}>
+                <Text style={styles.fillerText}>
+                  {reminderIntervalType === 'recurring_every_x_y' ? 'Recurring every' : 'Recurring'}
+                </Text>
+                <Controller
+                  name="reminderRecurrenceIntervalAmount"
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                      value={value?.toString() ?? '0'}
+                      onChangeText={(newValue) => onChange(parseInt(newValue, 10) || 0)}
+                      onBlur={onBlur}
+                      keyboardType="numeric"
+                      maxLength={3}
+                    />
+                  )}
+                />
+                {reminderIntervalType === 'recurring_x_times_per_y' && <Text style={styles.fillerText}>times per</Text>}
+                <Controller
+                  name="reminderRecurrenceIntervalUnit"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
+                      {REMINDER_RECURRENCE_INTERVAL_UNIT_OPTIONS.map(({ key, label }) => (
+                        <Picker.Item
+                          key={key}
+                          label={reminderIntervalType === 'recurring_every_x_y' ? `${label}s` : label}
+                          value={key}
+                        />
+                      ))}
+                    </Picker>
+                  )}
+                />
+              </View>
+            </View>
+          )}
+          <View style={styles.inputGroup}>
+            <View style={styles.rowContainer}>
+              <View style={styles.rowItem}>
+                <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Date' : 'Start date'}</Text>
                 <Button
                   icon="calendar"
                   mode="outlined"
                   onPress={() => {
-                    setReminderOnlyOnceDateDialogVisible(true);
+                    setReminderStartDateDialogVisible(true);
                   }}
                 >
-                  {reminderOnlyOnceDate || '(edit)'}
+                  {reminderStartDate || '(edit)'}
                 </Button>
               </View>
-            )}
-            <View style={styles.leftAligned}>
-              <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
-              <Button
-                icon="clock"
-                mode="outlined"
-                onPress={() => {
-                  setReminderStartTimeDialogVisible(true);
-                }}
-              >
-                {reminderStartTime || '(edit)'}
-              </Button>
-            </View>
-            {reminderIntervalType !== 'only_once' && (
-              <View style={styles.leftAligned}>
-                <Text style={styles.label}>End time</Text>
+              {reminderIntervalType !== 'only_once' && (
+                <View style={styles.rowItem}>
+                  <Text style={styles.label}>End date</Text>
+                  <Button
+                    icon="calendar"
+                    mode="outlined"
+                    onPress={() => {
+                      setReminderStartDateDialogVisible(true);
+                    }}
+                  >
+                    {reminderStartDate || '(edit)'}
+                  </Button>
+                </View>
+              )}
+              <View style={styles.rowItem}>
+                <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
                 <Button
                   icon="clock"
                   mode="outlined"
                   onPress={() => {
-                    setReminderEndTimeDialogVisible(true);
+                    setReminderStartTimeDialogVisible(true);
                   }}
                 >
-                  {reminderEndTime || '(edit)'}
+                  {reminderStartTime || '(edit)'}
                 </Button>
               </View>
+              {reminderIntervalType !== 'only_once' && (
+                <View style={styles.rowItem}>
+                  <Text style={styles.label}>End time</Text>
+                  <Button
+                    icon="clock"
+                    mode="outlined"
+                    onPress={() => {
+                      setReminderEndTimeDialogVisible(true);
+                    }}
+                  >
+                    {reminderEndTime || '(edit)'}
+                  </Button>
+                </View>
+              )}
+            </View>
+            {reminderIntervalType !== 'only_once' && (
+              <Text style={styles.timeRangeNoticeText}>
+                Between what time range do you want the reminders to be run, on a daily basis?
+              </Text>
             )}
           </View>
         </>
       )}
-
-      <DatePickerModal
-        locale="en"
-        mode="single"
-        visible={reminderOnlyOnceDateDialogVisible}
-        date={reminderOnlyOnceDate ? new Date(reminderOnlyOnceDate) : undefined}
-        onDismiss={() => {
-          setReminderOnlyOnceDateDialogVisible(false);
-        }}
-        onConfirm={(value) => {
-          setValue(
-            'reminderOnlyOnceDate',
-            value.date ? DateTime.fromJSDate(value.date).toFormat('yyyy-MM-dd') : undefined,
-            {
-              shouldDirty: true,
-            }
-          );
-          setReminderOnlyOnceDateDialogVisible(false);
-        }}
-      />
       <TimePickerModal
         locale="en"
         use24HourClock={true}
@@ -169,6 +209,40 @@ const ActionFormReminderSection = ({
           setReminderEndTimeDialogVisible(false);
         }}
       />
+      <DatePickerModal
+        locale="en"
+        mode="single"
+        visible={reminderStartDateDialogVisible}
+        date={reminderStartDate ? new Date(reminderStartDate) : undefined}
+        onDismiss={() => {
+          setReminderStartDateDialogVisible(false);
+        }}
+        onConfirm={(value) => {
+          setValue(
+            'reminderStartDate',
+            value.date ? DateTime.fromJSDate(value.date).toFormat('yyyy-MM-dd') : undefined,
+            {
+              shouldDirty: true,
+            }
+          );
+          setReminderStartDateDialogVisible(false);
+        }}
+      />
+      <DatePickerModal
+        locale="en"
+        mode="single"
+        visible={reminderEndDateDialogVisible}
+        date={reminderEndDate ? new Date(reminderEndDate) : undefined}
+        onDismiss={() => {
+          setReminderEndDateDialogVisible(false);
+        }}
+        onConfirm={(value) => {
+          setValue('reminderEndDate', value.date ? DateTime.fromJSDate(value.date).toFormat('yyyy-MM-dd') : undefined, {
+            shouldDirty: true,
+          });
+          setReminderEndDateDialogVisible(false);
+        }}
+      />
     </>
   );
 };
@@ -190,12 +264,22 @@ const styles = StyleSheet.create({
   picker: {
     minWidth: 140,
   },
-  leftAligned: {
-    alignItems: 'flex-start',
-    marginHorizontal: 2,
+  fillerText: {
+    verticalAlign: 'middle',
+    paddingVertical: 10,
   },
   rowContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  rowItem: {
+    alignItems: 'flex-start',
+    paddingHorizontal: 2,
+    paddingBottom: 5,
+    width: '50%',
+  },
+  timeRangeNoticeText: {
+    fontSize: 10,
   },
 });
 

@@ -27,9 +27,12 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       goalIntervalUnit: data?.goalIntervalUnit ?? 'day',
       reminderEnabled: false,
       reminderIntervalType: data?.reminderIntervalType ?? 'only_once',
+      reminderRecurrenceIntervalAmount: data?.reminderRecurrenceIntervalAmount ?? 0,
+      reminderRecurrenceIntervalUnit: data?.reminderRecurrenceIntervalUnit ?? 'day',
+      reminderStartDate: data?.reminderStartDate ?? '',
+      reminderEndDate: data?.reminderEndDate ?? '',
       reminderStartTime: data?.reminderStartTime ?? '',
       reminderEndTime: data?.reminderEndTime ?? '',
-      reminderOnlyOnceDate: data?.reminderOnlyOnceDate ?? '',
     },
   });
   const [goalUnitCustom, setGoalUnitCustom] = useState('');
