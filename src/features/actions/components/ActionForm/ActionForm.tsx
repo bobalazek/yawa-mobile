@@ -24,9 +24,9 @@ const GOAL_UNIT_OPTIONS = [
   { key: 'deciliters', label: 'deciliters' },
   { key: 'pages', label: 'pages read' },
 ];
-const GOAL_INTERVAL_UNITS_OPTIONS = [
+const GOAL_INTERVAL_UNIT_OPTIONS = [
   { key: 'day', label: 'day' },
-  { key: 'week', label: 'deek' },
+  { key: 'week', label: 'week' },
   { key: 'month', label: 'month' },
   { key: 'year', label: 'year' },
 ];
@@ -34,6 +34,11 @@ const REMINDER_INTERVAL_TYPE_OPTIONS = [
   { key: 'only_once', label: 'Only once' },
   { key: 'recurring_every_x_y', label: 'Recurring every X Y' },
   { key: 'recurring_x_times_per_y', label: 'Recurring X times per Y' },
+];
+const REMINDER_RECURRENCE_INTERVAL_UNIT_OPTIONS = [
+  { key: 'minute', label: 'minute' },
+  { key: 'hour', label: 'hour' },
+  ...GOAL_INTERVAL_UNIT_OPTIONS,
 ];
 
 const ActionForm = ({ data }: { data?: ActionType }) => {
@@ -144,7 +149,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
-                  {GOAL_INTERVAL_UNITS_OPTIONS.map(({ key, label }) => (
+                  {GOAL_INTERVAL_UNIT_OPTIONS.map(({ key, label }) => (
                     <Picker.Item key={key} label={label} value={key} />
                   ))}
                 </Picker>
@@ -187,7 +192,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
             <View style={[styles.inputGroup, styles.rowContainer]}>
               {reminderIntervalType === 'only_once' && (
                 <View style={styles.leftAligned}>
-                  <Text>Date</Text>
+                  <Text style={styles.label}>Date</Text>
                   <Button
                     icon="calendar"
                     mode="outlined"
@@ -200,7 +205,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
                 </View>
               )}
               <View style={styles.leftAligned}>
-                <Text>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
+                <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
                 <Button
                   icon="clock"
                   mode="outlined"
@@ -213,7 +218,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
               </View>
               {reminderIntervalType !== 'only_once' && (
                 <View style={styles.leftAligned}>
-                  <Text>End time</Text>
+                  <Text style={styles.label}>End time</Text>
                   <Button
                     icon="clock"
                     mode="outlined"
@@ -329,6 +334,9 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     marginBottom: 20,
+  },
+  label: {
+    fontSize: 12,
   },
   errorText: {
     color: 'red',
