@@ -5,7 +5,7 @@ module.exports = {
   useTabs: false,
   singleQuote: true,
   semi: true,
-  importOrder: ['^[./]'],
+  importOrder: ['^src/(.*)$', '^[./]'],
   importOrderParserPlugins: ['typescript', 'jsx', 'classProperties', 'decorators-legacy'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
