@@ -127,7 +127,7 @@ const ActionFormReminderSection = ({
                     setReminderStartDateDialogVisible(true);
                   }}
                 >
-                  {reminderStartDate || '(edit)'}
+                  {reminderStartDate || '(none)'}
                 </Button>
               </View>
               {reminderIntervalType !== 'only_once' && (
@@ -137,10 +137,10 @@ const ActionFormReminderSection = ({
                     icon="calendar"
                     mode="outlined"
                     onPress={() => {
-                      setReminderStartDateDialogVisible(true);
+                      setReminderEndDateDialogVisible(true);
                     }}
                   >
-                    {reminderStartDate || '(edit)'}
+                    {reminderEndDate || '(none)'}
                   </Button>
                 </View>
               )}
@@ -153,7 +153,7 @@ const ActionFormReminderSection = ({
                     setReminderStartTimeDialogVisible(true);
                   }}
                 >
-                  {reminderStartTime || '(edit)'}
+                  {reminderStartTime || '(none)'}
                 </Button>
               </View>
               {reminderIntervalType !== 'only_once' && (
@@ -166,7 +166,7 @@ const ActionFormReminderSection = ({
                       setReminderEndTimeDialogVisible(true);
                     }}
                   >
-                    {reminderEndTime || '(edit)'}
+                    {reminderEndTime || '(none)'}
                   </Button>
                 </View>
               )}

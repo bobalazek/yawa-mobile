@@ -15,9 +15,9 @@ export const GOAL_TYPES_OPTIONS = [
   { key: 'measurable', label: 'Measurable' },
 ];
 export const GOAL_UNIT_OPTIONS = [
-  { key: 'minutes', label: 'minutes' },
   { key: 'deciliters', label: 'deciliters' },
-  { key: 'pages', label: 'pages read' },
+  { key: 'minutes', label: 'minutes' },
+  { key: 'pages read', label: 'pages read' },
 ];
 export const GOAL_INTERVAL_UNIT_OPTIONS = [
   { key: 'day', label: 'day' },

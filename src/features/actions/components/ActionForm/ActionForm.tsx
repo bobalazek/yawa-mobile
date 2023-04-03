@@ -23,7 +23,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       name: data?.name ?? '',
       goalType: data?.goalType ?? 'binary',
       goalAmount: data?.goalAmount ?? 30,
-      goalUnit: data?.goalUnit ?? 'minutes',
+      goalUnit: data?.goalUnit ?? 'deciliters',
       goalIntervalUnit: data?.goalIntervalUnit ?? 'day',
       reminderEnabled: false,
       reminderIntervalType: data?.reminderIntervalType ?? 'only_once',
@@ -31,7 +31,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       reminderRecurrenceIntervalUnit: data?.reminderRecurrenceIntervalUnit ?? 'day',
       reminderStartDate: data?.reminderStartDate ?? '',
       reminderEndDate: data?.reminderEndDate ?? '',
-      reminderStartTime: data?.reminderStartTime ?? '',
+      reminderStartTime: data?.reminderStartTime ?? '08:00',
       reminderEndTime: data?.reminderEndTime ?? '',
     },
   });
