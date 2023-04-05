@@ -135,21 +135,6 @@ const ActionFormReminderSection = ({
                   {reminderStartDate || '(none)'}
                 </Button>
               </View>
-              {reminderIntervalType !== 'only_once' && (
-                <View style={styles.rowItem}>
-                  <Text style={styles.label}>End date</Text>
-                  <Button
-                    icon="calendar"
-                    mode="outlined"
-                    onPress={() => {
-                      setReminderEndDateDialogVisible(true);
-                    }}
-                    style={styles.button}
-                  >
-                    {reminderEndDate || '(none)'}
-                  </Button>
-                </View>
-              )}
               <View style={styles.rowItem}>
                 <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
                 <Button
@@ -164,19 +149,34 @@ const ActionFormReminderSection = ({
                 </Button>
               </View>
               {reminderIntervalType !== 'only_once' && (
-                <View style={styles.rowItem}>
-                  <Text style={styles.label}>End time</Text>
-                  <Button
-                    icon="clock"
-                    mode="outlined"
-                    onPress={() => {
-                      setReminderEndTimeDialogVisible(true);
-                    }}
-                    style={styles.button}
-                  >
-                    {reminderEndTime || '(none)'}
-                  </Button>
-                </View>
+                <>
+                  <View style={styles.rowItem}>
+                    <Text style={styles.label}>End date</Text>
+                    <Button
+                      icon="calendar"
+                      mode="outlined"
+                      onPress={() => {
+                        setReminderEndDateDialogVisible(true);
+                      }}
+                      style={styles.button}
+                    >
+                      {reminderEndDate || '(none)'}
+                    </Button>
+                  </View>
+                  <View style={styles.rowItem}>
+                    <Text style={styles.label}>End time</Text>
+                    <Button
+                      icon="clock"
+                      mode="outlined"
+                      onPress={() => {
+                        setReminderEndTimeDialogVisible(true);
+                      }}
+                      style={styles.button}
+                    >
+                      {reminderEndTime || '(none)'}
+                    </Button>
+                  </View>
+                </>
               )}
             </View>
             {reminderIntervalType !== 'only_once' && (
