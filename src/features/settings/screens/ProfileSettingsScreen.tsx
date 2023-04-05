@@ -1,16 +1,14 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import { DateTime } from 'luxon';
 import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
-import { DatePickerModal, en, registerTranslation } from 'react-native-paper-dates';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { refreshUser, userSelector } from '../../auth/state/authSlice';
 import { cancelNewEmail, resendNewEmailConfirmationEmail, updateProfile } from '../state/profileSettingsSlice';
-
-registerTranslation('en', en);
 
 const timezones = moment.tz.names().filter((timezone) => {
   return !timezone.startsWith('Etc') && (timezone === 'UTC' || timezone.includes('/'));
@@ -52,19 +50,17 @@ const ProfileSettingsScreen = () => {
         >
           {birthday ? DateTime.fromISO(birthday).toFormat('yyyy-MM-dd') : 'not set'} (click to update)
         </Text>
-        <DatePickerModal
-          locale="en"
-          mode="single"
-          visible={showBirthdayPicker}
-          onDismiss={() => {
-            setShowBirthdayPicker(false);
-          }}
-          date={birthday ? new Date(birthday) : undefined}
-          onConfirm={(params) => {
-            setBirthday(params.date ? DateTime.fromJSDate(params.date).toFormat('yyyy-MM-dd') : null);
-            setShowBirthdayPicker(false);
-          }}
-        />
+        {showBirthdayPicker && (
+          <DateTimePicker
+            mode="date"
+            is24Hour={true}
+            value={birthday ? new Date(birthday) : new Date()}
+            onChange={(_, selectedDate) => {
+              setBirthday(selectedDate ? DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd') : null);
+              setShowBirthdayPicker(false);
+            }}
+          />
+        )}
       </View>
       {user?.newEmail && (
         <Text style={styles.textLeft}>
