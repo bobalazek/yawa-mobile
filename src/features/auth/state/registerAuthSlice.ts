@@ -41,16 +41,16 @@ export const register = createAsyncThunk<
 
     extra.showToast({
       type: 'success',
-      text1: 'Login',
-      text2: 'You have successfully logged in',
+      title: 'Login',
+      description: 'You have successfully logged in',
     });
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
     extra.showToast({
       type: 'error',
-      text1: 'Error',
-      text2: errorMessage,
+      title: 'Error',
+      description: errorMessage,
     });
 
     return rejectWithValue(errorMessage);

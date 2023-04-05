@@ -54,8 +54,8 @@ export const init = createAsyncThunk<void, void, { extra: StoreExtra }>(
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);
@@ -78,8 +78,8 @@ export const refreshUser = createAsyncThunk<void, void, { extra: StoreExtra }>(
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);

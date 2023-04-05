@@ -35,16 +35,16 @@ export const changePassword = createAsyncThunk<
 
       extra.showToast({
         type: 'success',
-        text1: 'Change password',
-        text2: responseMessage,
+        title: 'Change password',
+        description: responseMessage,
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);

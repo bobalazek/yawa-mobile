@@ -1,11 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { showNotification } from '../../../../utils/notifications';
 import { ActionSchema, ActionType } from '../../schemas/ActionSchema';
+import actionsService from '../../services/actionsService';
 import ActionFormGoalSection from './ActionFormGoalSection';
 import ActionFormReminderSection from './ActionFormReminderSection';
 
@@ -33,6 +36,27 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       reminderEndDate: data?.reminderEndDate ?? '',
       reminderStartTime: data?.reminderStartTime ?? '08:00',
       reminderEndTime: data?.reminderEndTime ?? '',
+    },
+  });
+  const mutation = useMutation({
+    mutationFn: async (mutationData: ActionType) => {
+      try {
+        await actionsService.create(mutationData);
+
+        showNotification({
+          type: 'success',
+          title: 'Success',
+          description: 'Action created successfully',
+        });
+      } catch (err: unknown) {
+        const description = err instanceof Error ? err.message : 'Something went wrong';
+
+        showNotification({
+          type: 'error',
+          title: 'Error',
+          description,
+        });
+      }
     },
   });
   const [goalUnitCustom, setGoalUnitCustom] = useState('');
@@ -66,8 +90,10 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
               goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
             };
 
-            console.log(finalFormData);
+            mutation.mutate(finalFormData);
           })}
+          loading={mutation.isLoading}
+          disabled={mutation.isLoading}
         >
           Save
         </Button>

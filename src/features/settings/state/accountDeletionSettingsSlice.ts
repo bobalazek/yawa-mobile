@@ -34,16 +34,16 @@ export const requestAccountDeletion = createAsyncThunk<undefined, undefined, { e
 
       extra.showToast({
         type: 'success',
-        text1: 'Account deletion',
-        text2: responseMessage,
+        title: 'Account deletion',
+        description: responseMessage,
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);

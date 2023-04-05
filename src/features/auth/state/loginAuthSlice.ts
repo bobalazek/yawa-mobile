@@ -39,16 +39,16 @@ export const login = createAsyncThunk<undefined, { email: string; password: stri
 
       extra.showToast({
         type: 'success',
-        text1: 'Login',
-        text2: 'You have successfully logged in',
+        title: 'Login',
+        description: 'You have successfully logged in',
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);
@@ -64,7 +64,7 @@ export const logout = createAsyncThunk<undefined, undefined, { extra: StoreExtra
     try {
       try {
         await authService.logout();
-      } catch (err) {
+      } catch (err: unknown) {
         // Not a big deal if logout fails
       }
 
@@ -75,16 +75,16 @@ export const logout = createAsyncThunk<undefined, undefined, { extra: StoreExtra
 
       extra.showToast({
         type: 'success',
-        text1: 'Logout',
-        text2: 'You have successfully logged out',
+        title: 'Logout',
+        description: 'You have successfully logged out',
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);

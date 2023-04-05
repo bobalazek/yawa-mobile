@@ -37,16 +37,16 @@ export const updateProfile = createAsyncThunk<
 
       extra.showToast({
         type: 'success',
-        text1: 'Update profile',
-        text2: responseMessage,
+        title: 'Update profile',
+        description: responseMessage,
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);
@@ -64,16 +64,16 @@ export const resendNewEmailConfirmationEmail = createAsyncThunk<undefined, void,
 
       extra.showToast({
         type: 'success',
-        text1: 'Resend new email confirmation email',
-        text2: responseMessage,
+        title: 'Resend new email confirmation email',
+        description: responseMessage,
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);
@@ -90,16 +90,16 @@ export const cancelNewEmail = createAsyncThunk<undefined, void, { extra: StoreEx
 
       extra.showToast({
         type: 'success',
-        text1: 'Cancel new email',
-        text2: responseMessage,
+        title: 'Cancel new email',
+        description: responseMessage,
       });
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
 
       extra.showToast({
         type: 'error',
-        text1: 'Error',
-        text2: errorMessage,
+        title: 'Error',
+        description: errorMessage,
       });
 
       return rejectWithValue(errorMessage);

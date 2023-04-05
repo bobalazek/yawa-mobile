@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import Toast from 'react-native-toast-message';
 
 import { NODE_ENV } from './constants';
 import actionsReducer from './features/actions/state/actionsSlice';
@@ -10,6 +9,7 @@ import accountDeletionSettingsReducer from './features/settings/state/accountDel
 import passwordSettingsReducer from './features/settings/state/passwordSettingsSlice';
 import profileSettingsReducer from './features/settings/state/profileSettingsSlice';
 import networkReducer from './state/networkSlice';
+import { showNotification } from './utils/notifications';
 
 const reducer = combineReducers({
   auth: authReducer,
@@ -23,7 +23,7 @@ const reducer = combineReducers({
 });
 
 const storeThunkExtraArgument = {
-  showToast: Toast.show,
+  showToast: showNotification,
 };
 
 export const store = configureStore({
