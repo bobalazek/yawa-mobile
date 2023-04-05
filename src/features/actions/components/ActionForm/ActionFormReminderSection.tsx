@@ -70,6 +70,10 @@ const ActionFormReminderSection = ({
                 />
               )}
             />
+            <Text style={styles.helpText}>
+              Select "Only once" to set a single reminder. Select "Recurring every X Y" to set a reminder that recurs
+              every X Y. Select "Recurring X times per Y" to set a reminder that recurs X times per Y.
+            </Text>
             {errors.reminderIntervalType && <Text style={styles.errorText}>{errors.reminderIntervalType.message}</Text>}
           </View>
           {reminderIntervalType !== 'only_once' && (
@@ -126,6 +130,7 @@ const ActionFormReminderSection = ({
                   onPress={() => {
                     setReminderStartDateDialogVisible(true);
                   }}
+                  style={styles.button}
                 >
                   {reminderStartDate || '(none)'}
                 </Button>
@@ -139,6 +144,7 @@ const ActionFormReminderSection = ({
                     onPress={() => {
                       setReminderEndDateDialogVisible(true);
                     }}
+                    style={styles.button}
                   >
                     {reminderEndDate || '(none)'}
                   </Button>
@@ -152,6 +158,7 @@ const ActionFormReminderSection = ({
                   onPress={() => {
                     setReminderStartTimeDialogVisible(true);
                   }}
+                  style={styles.button}
                 >
                   {reminderStartTime || '(none)'}
                 </Button>
@@ -165,6 +172,7 @@ const ActionFormReminderSection = ({
                     onPress={() => {
                       setReminderEndTimeDialogVisible(true);
                     }}
+                    style={styles.button}
                   >
                     {reminderEndTime || '(none)'}
                   </Button>
@@ -266,11 +274,20 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
   },
+  helpText: {
+    fontSize: 10,
+    color: 'gray',
+    marginTop: 10,
+  },
   errorText: {
     color: 'red',
   },
   picker: {
     minWidth: 140,
+    flexGrow: 1,
+  },
+  button: {
+    width: '100%',
   },
   fillerViewStart: {
     paddingRight: 10,
@@ -290,8 +307,8 @@ const styles = StyleSheet.create({
   },
   rowItem: {
     alignItems: 'flex-start',
-    paddingHorizontal: 2,
-    paddingBottom: 5,
+    paddingHorizontal: 10,
+    paddingBottom: 10,
     width: '50%',
   },
   timeRangeNoticeText: {

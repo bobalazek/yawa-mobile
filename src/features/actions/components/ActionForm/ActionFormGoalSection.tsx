@@ -46,7 +46,12 @@ const ActionFormGoalSection = ({
   return (
     <>
       <Text style={styles.heading}>Goal</Text>
-      <Text style={styles.inputGroup}>TODO: add goal selector modal</Text>
+      <View style={styles.inputGroup}>
+        <Text>TODO: add goals selector modal</Text>
+        <Text style={styles.helpText}>
+          Select which goal would relate to this action. You can add more goals later.
+        </Text>
+      </View>
       <View style={styles.inputGroup}>
         <Controller
           name="goalType"
@@ -55,9 +60,6 @@ const ActionFormGoalSection = ({
             <ButtonGroup label="Goal type" value={value} onChange={onChange} options={GOAL_TYPES_OPTIONS} />
           )}
         />
-        {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
-      </View>
-      <View style={styles.inputGroup}>
         <View style={styles.rowContainer}>
           {goalType !== 'binary' && (
             <>
@@ -114,9 +116,15 @@ const ActionFormGoalSection = ({
             )}
           />
         </View>
+        <Text style={styles.helpText}>
+          Select "Yes/No", if you expect this action to only confirm once per day/week/month (like Eat healthy, Don't
+          smoke, ...) or "Measurable", if you expect this action to be measured in a unit (like Hydrate, Read a Book,
+          ...).
+        </Text>
         {errors.goalAmount && <Text style={styles.errorText}>{errors.goalAmount.message}</Text>}
         {errors.goalUnit && <Text style={styles.errorText}>{errors.goalUnit.message}</Text>}
         {errors.goalIntervalUnit && <Text style={styles.errorText}>{errors.goalIntervalUnit.message}</Text>}
+        {errors.goalType && <Text style={styles.errorText}>{errors.goalType.message}</Text>}
       </View>
       <ActionFromGoalIntervalUnitCustomDialog
         visible={goalUnitDialogVisible}
@@ -151,11 +159,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
   },
+  helpText: {
+    fontSize: 10,
+    color: 'gray',
+    marginTop: 10,
+  },
   errorText: {
     color: 'red',
   },
   picker: {
     minWidth: 140,
+    flexGrow: 1,
   },
   fillerText: {
     verticalAlign: 'middle',
@@ -163,6 +177,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginTop: 10,
   },
 });
 
