@@ -4,6 +4,7 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import { entriesSelector, fetchEntries, isLoadingSelector } from '../../state/actionsSlice';
+import Action from '../Action/Action';
 
 const ActionsList = () => {
   const dispatch = useAppDispatch();
@@ -32,7 +33,9 @@ const ActionsList = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textCenter}>ACTIONS LIST</Text>
+      {entries.map((action) => {
+        return <Action key={action.id} data={action} />;
+      })}
     </View>
   );
 };

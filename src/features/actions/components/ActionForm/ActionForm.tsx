@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -6,15 +7,19 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useAppDispatch } from '../../../../hooks';
 import { showNotification } from '../../../../utils/notifications';
 import { ActionSchema, ActionType } from '../../schemas/ActionSchema';
 import actionsService from '../../services/actionsService';
+import { fetchEntries } from '../../state/actionsSlice';
 import ActionFormGoalSection from './ActionFormGoalSection';
 import ActionFormReminderSection from './ActionFormReminderSection';
 
 export const CUSTOM_KEY = '__custom';
 
 const ActionForm = ({ data }: { data?: ActionType }) => {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
@@ -48,6 +53,10 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
           title: 'Success',
           description: 'Action created successfully',
         });
+
+        dispatch(fetchEntries());
+
+        navigation.goBack();
       } catch (err: unknown) {
         const description = err instanceof Error ? err.message : 'Something went wrong';
 
@@ -85,9 +94,13 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
         <Button
           mode="contained"
           onPress={handleSubmit((formData) => {
-            const finalFormData = {
+            const finalFormData: ActionType = {
               ...formData,
               goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
+              reminderStartDate: formData.reminderStartDate ? formData.reminderStartDate : undefined,
+              reminderEndDate: formData.reminderStartDate ? formData.reminderStartDate : undefined,
+              reminderStartTime: formData.reminderStartTime ? formData.reminderStartTime : undefined,
+              reminderEndTime: formData.reminderEndTime ? formData.reminderEndTime : undefined,
             };
 
             mutation.mutate(finalFormData);
