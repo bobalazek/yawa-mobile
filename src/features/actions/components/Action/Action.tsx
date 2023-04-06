@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#e6e6e6',
     width: '100%',
-    marginBottom: 10,
     borderRadius: 10,
   },
 });

@@ -34,7 +34,11 @@ const ActionsList = () => {
   return (
     <View style={styles.container}>
       {entries.map((action) => {
-        return <Action key={action.id} data={action} />;
+        return (
+          <View key={action.id} style={styles.actionContainer}>
+            <Action data={action} />
+          </View>
+        );
       })}
     </View>
   );
@@ -47,6 +51,9 @@ const styles = StyleSheet.create({
   loadingContainer: {
     padding: 24,
     textAlign: 'center',
+  },
+  actionContainer: {
+    marginBottom: 10,
   },
   textCenter: {
     textAlign: 'center',
