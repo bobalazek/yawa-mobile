@@ -6,6 +6,7 @@ import { AUTHORIZATION_HEADER_NAME } from '../../../constants';
 import { RootState, StoreExtra } from '../../../store';
 import { UserInterface } from '../../../types/UserInterface';
 import authService from '../services/authService';
+import { logout } from './loginAuthSlice';
 
 interface AuthState {
   isReady: boolean;
@@ -40,9 +41,20 @@ const slice = createSlice({
 export const init = createAsyncThunk<void, void, { extra: StoreExtra }>(
   'auth/init',
   async (_, { dispatch, rejectWithValue, extra }) => {
-    try {
-      dispatch(setIsReady(false));
+    dispatch(setIsReady(false));
 
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          dispatch(logout());
+        }
+
+        return Promise.reject(error);
+      }
+    );
+
+    try {
       const credentials = await Keychain.getGenericPassword();
       const accessToken = credentials ? credentials.password : null;
       if (accessToken) {
