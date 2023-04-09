@@ -22,7 +22,7 @@ const RegisterScreen = ({ navigation }: Props) => {
       <Title style={styles.title}>YAWA</Title>
       <Title style={styles.subtitle}>Sign up</Title>
       <TextInput label="First name" value={firstName} onChangeText={setFirstName} style={styles.input} />
-      <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
+      <TextInput label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" style={styles.input} />
       <TextInput label="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
       <Button
         mode="contained"

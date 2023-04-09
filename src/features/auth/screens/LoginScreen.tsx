@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }: Props) => {
     <View style={styles.container}>
       <Title style={styles.title}>Welcome to YAWA</Title>
       <Title style={styles.subtitle}>Login</Title>
-      <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} />
+      <TextInput label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" style={styles.input} />
       <TextInput label="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
       <Button
         mode="contained"
