@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
+import { DateTime } from 'luxon';
 import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
@@ -36,7 +37,7 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       reminderIntervalType: data?.reminderIntervalType ?? 'only_once',
       reminderRecurrenceIntervalAmount: data?.reminderRecurrenceIntervalAmount ?? 0,
       reminderRecurrenceIntervalUnit: data?.reminderRecurrenceIntervalUnit ?? 'day',
-      reminderStartDate: data?.reminderStartDate ?? '',
+      reminderStartDate: data?.reminderStartDate ?? DateTime.now().toFormat('yyyy-MM-dd'),
       reminderEndDate: data?.reminderEndDate ?? '',
       reminderStartTime: data?.reminderStartTime ?? '08:00',
       reminderEndTime: data?.reminderEndTime ?? '',

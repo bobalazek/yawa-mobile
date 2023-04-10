@@ -1,8 +1,8 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { Button, Text, TextInput } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -186,78 +186,86 @@ const ActionFormReminderSection = ({
           </View>
         </>
       )}
-      {reminderStartTimeDialogVisible && (
-        <DateTimePicker
-          mode="time"
-          is24Hour={true}
-          value={reminderStartTime ? new Date(reminderStartTime) : new Date()}
-          onChange={(_, selectedDate) => {
-            setValue(
-              'reminderStartTime',
-              selectedDate
-                ? `${padLeft(selectedDate.getHours(), 2)}:${padLeft(selectedDate.getMinutes(), 2)}`
-                : undefined,
-              {
-                shouldDirty: true,
-              }
-            );
-            setReminderStartTimeDialogVisible(false);
-          }}
-        />
-      )}
-      {reminderEndTimeDialogVisible && (
-        <DateTimePicker
-          mode="time"
-          is24Hour={true}
-          value={reminderEndTime ? new Date(reminderEndTime) : new Date()}
-          onChange={(_, selectedDate) => {
-            setValue(
-              'reminderEndTime',
-              selectedDate
-                ? `${padLeft(selectedDate.getHours(), 2)}:${padLeft(selectedDate.getMinutes(), 2)}`
-                : undefined,
-              {
-                shouldDirty: true,
-              }
-            );
-            setReminderEndTimeDialogVisible(false);
-          }}
-        />
-      )}
-      {reminderStartDateDialogVisible && (
-        <DateTimePicker
-          mode="date"
-          is24Hour={true}
-          value={reminderStartDate ? new Date(reminderStartDate) : new Date()}
-          onChange={(_, selectedDate) => {
-            setValue(
-              'reminderStartDate',
-              selectedDate ? DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd') : undefined,
-              {
-                shouldDirty: true,
-              }
-            );
-            setReminderStartDateDialogVisible(false);
-          }}
-        />
-      )}
-      {reminderEndDateDialogVisible && (
-        <DateTimePicker
-          mode="date"
-          is24Hour={true}
-          value={reminderEndDate ? new Date(reminderEndDate) : new Date()}
-          onChange={(_, selectedDate) => {
-            setValue(
-              'reminderEndDate',
-              selectedDate ? DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd') : undefined,
-              {
-                shouldDirty: true,
-              }
-            );
-            setReminderEndDateDialogVisible(false);
-          }}
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={reminderStartDateDialogVisible}
+        mode="date"
+        is24Hour={true}
+        date={reminderStartDate ? new Date(reminderStartDate) : new Date()}
+        onConfirm={(selectedDate) => {
+          setValue(
+            'reminderStartDate',
+            selectedDate ? DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd') : undefined,
+            {
+              shouldDirty: true,
+            }
+          );
+          setReminderStartDateDialogVisible(false);
+        }}
+        onCancel={() => {
+          setReminderStartDateDialogVisible(false);
+        }}
+      />
+      <DateTimePickerModal
+        isVisible={reminderEndDateDialogVisible}
+        mode="date"
+        is24Hour={true}
+        date={reminderEndDate ? new Date(reminderEndDate) : new Date()}
+        onConfirm={(selectedDate) => {
+          setValue(
+            'reminderEndDate',
+            selectedDate ? DateTime.fromJSDate(selectedDate).toFormat('yyyy-MM-dd') : undefined,
+            {
+              shouldDirty: true,
+            }
+          );
+          setReminderEndDateDialogVisible(false);
+        }}
+        onCancel={() => {
+          setReminderEndDateDialogVisible(false);
+        }}
+      />
+      <DateTimePickerModal
+        isVisible={reminderStartTimeDialogVisible}
+        mode="time"
+        is24Hour={true}
+        date={reminderStartTime ? new Date(`2000-01-01T${reminderStartTime}:00`) : new Date()}
+        onConfirm={(selectedDate) => {
+          setValue(
+            'reminderStartTime',
+            selectedDate
+              ? `${padLeft(selectedDate.getHours(), 2)}:${padLeft(selectedDate.getMinutes(), 2)}`
+              : undefined,
+            {
+              shouldDirty: true,
+            }
+          );
+          setReminderStartTimeDialogVisible(false);
+        }}
+        onCancel={() => {
+          setReminderStartTimeDialogVisible(false);
+        }}
+      />
+      <DateTimePickerModal
+        isVisible={reminderEndTimeDialogVisible}
+        mode="time"
+        is24Hour={true}
+        date={reminderEndTime ? new Date(`2000-01-01T${reminderEndTime}:00`) : new Date()}
+        onConfirm={(selectedDate) => {
+          setValue(
+            'reminderStartTime',
+            selectedDate
+              ? `${padLeft(selectedDate.getHours(), 2)}:${padLeft(selectedDate.getMinutes(), 2)}`
+              : undefined,
+            {
+              shouldDirty: true,
+            }
+          );
+          setReminderEndTimeDialogVisible(false);
+        }}
+        onCancel={() => {
+          setReminderEndTimeDialogVisible(false);
+        }}
+      />
     </>
   );
 };
