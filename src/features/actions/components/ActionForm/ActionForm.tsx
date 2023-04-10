@@ -89,10 +89,10 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
           onPress={handleSubmit((formData) => {
             const finalFormData: ActionType = {
               ...formData,
-              reminderStartDate: formData.reminderStartDate ? formData.reminderStartDate : undefined,
-              reminderEndDate: formData.reminderStartDate ? formData.reminderStartDate : undefined,
-              reminderStartTime: formData.reminderStartTime ? formData.reminderStartTime : undefined,
-              reminderEndTime: formData.reminderEndTime ? formData.reminderEndTime : undefined,
+              reminderStartDate: formData.reminderStartDate ?? undefined,
+              reminderEndDate: formData.reminderStartDate ?? undefined,
+              reminderStartTime: formData.reminderStartTime ?? undefined,
+              reminderEndTime: formData.reminderEndTime ?? undefined,
             };
 
             mutation.mutate(finalFormData);

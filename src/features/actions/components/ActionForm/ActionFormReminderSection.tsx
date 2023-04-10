@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Button, Text, TextInput } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 import RNPickerSelect from 'react-native-picker-select';
 
 import ButtonGroup from '../../../../components/ui/ButtonGroup/ButtonGroup';
@@ -122,58 +122,50 @@ const ActionFormReminderSection = ({
           <View style={styles.inputGroup}>
             <View style={styles.rowContainer}>
               <View style={styles.rowItem}>
-                <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Date' : 'Start date'}</Text>
-                <Button
-                  icon="calendar"
-                  mode="outlined"
-                  onPress={() => {
+                <TextInput
+                  label={reminderIntervalType === 'only_once' ? 'Date' : 'Start date'}
+                  value={reminderStartDate}
+                  onChangeText={(newValue) => setValue('reminderStartDate', newValue)}
+                  onFocus={() => {
                     setReminderStartDateDialogVisible(true);
                   }}
-                  style={styles.button}
-                >
-                  {reminderStartDate || '(none)'}
-                </Button>
+                  style={styles.dateTimeInput}
+                />
               </View>
               <View style={styles.rowItem}>
-                <Text style={styles.label}>{reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}</Text>
-                <Button
-                  icon="clock"
-                  mode="outlined"
-                  onPress={() => {
+                <TextInput
+                  label={reminderIntervalType === 'only_once' ? 'Time' : 'Start time'}
+                  value={reminderStartTime}
+                  onChangeText={(newValue) => setValue('reminderStartTime', newValue)}
+                  onFocus={() => {
                     setReminderStartTimeDialogVisible(true);
                   }}
-                  style={styles.button}
-                >
-                  {reminderStartTime || '(none)'}
-                </Button>
+                  style={styles.dateTimeInput}
+                />
               </View>
               {reminderIntervalType !== 'only_once' && (
                 <>
                   <View style={styles.rowItem}>
-                    <Text style={styles.label}>End date</Text>
-                    <Button
-                      icon="calendar"
-                      mode="outlined"
-                      onPress={() => {
+                    <TextInput
+                      label="End date"
+                      value={reminderEndDate}
+                      onChangeText={(newValue) => setValue('reminderEndDate', newValue)}
+                      onFocus={() => {
                         setReminderEndDateDialogVisible(true);
                       }}
-                      style={styles.button}
-                    >
-                      {reminderEndDate || '(none)'}
-                    </Button>
+                      style={styles.dateTimeInput}
+                    />
                   </View>
                   <View style={styles.rowItem}>
-                    <Text style={styles.label}>End time</Text>
-                    <Button
-                      icon="clock"
-                      mode="outlined"
-                      onPress={() => {
+                    <TextInput
+                      label="End time"
+                      value={reminderEndTime}
+                      onChangeText={(newValue) => setValue('reminderEndTime', newValue)}
+                      onFocus={() => {
                         setReminderEndTimeDialogVisible(true);
                       }}
-                      style={styles.button}
-                    >
-                      {reminderEndTime || '(none)'}
-                    </Button>
+                      style={styles.dateTimeInput}
+                    />
                   </View>
                 </>
               )}
@@ -289,9 +281,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
   },
-  picker: {
-    minWidth: 140,
-    flexGrow: 1,
+  dateTimeInput: {
+    width: '100%',
   },
   button: {
     width: '100%',
