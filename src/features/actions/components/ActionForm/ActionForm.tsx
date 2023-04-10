@@ -5,7 +5,6 @@ import { DateTime } from 'luxon';
 import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppDispatch } from '../../../../hooks';
 import { showNotification } from '../../../../utils/notifications';
@@ -14,8 +13,6 @@ import actionsService from '../../services/actionsService';
 import { fetchEntries } from '../../state/actionsSlice';
 import ActionFormGoalSection from './ActionFormGoalSection';
 import ActionFormReminderSection from './ActionFormReminderSection';
-
-export const CUSTOM_KEY = '__custom';
 
 const ActionForm = ({ data }: { data?: ActionType }) => {
   const dispatch = useAppDispatch();
@@ -70,8 +67,8 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
   });
 
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <ScrollView>
+      <View style={styles.containerInner}>
         <View style={styles.inputGroup}>
           <Controller
             name="name"
@@ -87,27 +84,22 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
         <Button
           mode="contained"
           onPress={handleSubmit((formData) => {
-            const finalFormData: ActionType = {
-              ...formData,
-              reminderStartDate: formData.reminderStartDate ?? undefined,
-              reminderEndDate: formData.reminderStartDate ?? undefined,
-              reminderStartTime: formData.reminderStartTime ?? undefined,
-              reminderEndTime: formData.reminderEndTime ?? undefined,
-            };
-
-            mutation.mutate(finalFormData);
+            mutation.mutate(formData);
           })}
           loading={mutation.isLoading}
           disabled={mutation.isLoading}
         >
           Save
         </Button>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  containerInner: {
+    padding: 10,
+  },
   inputGroup: {
     marginBottom: 20,
   },
