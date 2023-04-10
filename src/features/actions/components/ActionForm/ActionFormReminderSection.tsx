@@ -1,10 +1,10 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { Control, Controller, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
+import RNPickerSelect from 'react-native-picker-select';
 
 import ButtonGroup from '../../../../components/ui/ButtonGroup/ButtonGroup';
 import SwitchWithLabel from '../../../../components/ui/SwitchWithLabel/SwitchWithLabel';
@@ -79,10 +79,8 @@ const ActionFormReminderSection = ({
           {reminderIntervalType !== 'only_once' && (
             <View style={styles.inputGroup}>
               <View style={styles.rowContainer}>
-                <View style={styles.fillerViewStart}>
-                  <Text style={styles.fillerText}>
-                    {reminderIntervalType === 'recurring_every_x_y' ? 'Recurring every' : 'Recurring'}
-                  </Text>
+                <View>
+                  <Text>{reminderIntervalType === 'recurring_every_x_y' ? 'Recurring every' : 'Recurring'}</Text>
                 </View>
                 <Controller
                   name="reminderRecurrenceIntervalAmount"
@@ -98,23 +96,24 @@ const ActionFormReminderSection = ({
                   )}
                 />
                 {reminderIntervalType === 'recurring_x_times_per_y' && (
-                  <View style={styles.fillerViewMiddle}>
-                    <Text style={styles.fillerText}>times per</Text>
+                  <View>
+                    <Text>times per</Text>
                   </View>
                 )}
                 <Controller
                   name="reminderRecurrenceIntervalUnit"
                   control={control}
                   render={({ field: { onChange, value } }) => (
-                    <Picker selectedValue={value} onValueChange={onChange} style={styles.picker}>
-                      {REMINDER_RECURRENCE_INTERVAL_UNIT_OPTIONS.map(({ key, label }) => (
-                        <Picker.Item
-                          key={key}
-                          label={reminderIntervalType === 'recurring_every_x_y' ? `${label}s` : label}
-                          value={key}
-                        />
-                      ))}
-                    </Picker>
+                    <RNPickerSelect
+                      style={pickerSelectStyles}
+                      value={value}
+                      onValueChange={onChange}
+                      items={REMINDER_RECURRENCE_INTERVAL_UNIT_OPTIONS.map(({ key, label }) => ({
+                        label: reminderIntervalType === 'recurring_every_x_y' ? `${label}s` : label,
+                        value: key,
+                      }))}
+                      placeholder={{}}
+                    />
                   )}
                 />
               </View>
@@ -289,30 +288,46 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
   },
-  fillerViewStart: {
-    paddingRight: 10,
-    justifyContent: 'center',
-  },
-  fillerViewMiddle: {
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  fillerText: {
-    verticalAlign: 'middle',
-    paddingVertical: 10,
-  },
   rowContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    gap: 10,
+    alignItems: 'center',
   },
   rowItem: {
     alignItems: 'flex-start',
-    paddingHorizontal: 10,
     paddingBottom: 10,
-    width: '50%',
+    flexGrow: 1,
+    minWidth: 120,
   },
   timeRangeNoticeText: {
     fontSize: 10,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  viewContainer: {
+    alignSelf: 'center',
+  },
+  inputIOS: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingRight: 30,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    paddingRight: 30,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    borderRadius: 8,
+    color: 'black',
   },
 });
 
