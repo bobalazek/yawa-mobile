@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
@@ -68,7 +67,6 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
       }
     },
   });
-  const [goalUnitCustom, setGoalUnitCustom] = useState('');
 
   return (
     <SafeAreaView>
@@ -83,20 +81,13 @@ const ActionForm = ({ data }: { data?: ActionType }) => {
           />
           {errors.name && <Text style={styles.errorText}>{errors.name.message}</Text>}
         </View>
-        <ActionFormGoalSection
-          control={control}
-          errors={errors}
-          setValue={setValue}
-          goalUnitCustom={goalUnitCustom}
-          setGoalUnitCustom={setGoalUnitCustom}
-        />
+        <ActionFormGoalSection control={control} errors={errors} setValue={setValue} />
         <ActionFormReminderSection control={control} errors={errors} setValue={setValue} />
         <Button
           mode="contained"
           onPress={handleSubmit((formData) => {
             const finalFormData: ActionType = {
               ...formData,
-              goalUnit: formData.goalUnit === CUSTOM_KEY && goalUnitCustom ? goalUnitCustom : formData.goalUnit,
               reminderStartDate: formData.reminderStartDate ? formData.reminderStartDate : undefined,
               reminderEndDate: formData.reminderStartDate ? formData.reminderStartDate : undefined,
               reminderStartTime: formData.reminderStartTime ? formData.reminderStartTime : undefined,
