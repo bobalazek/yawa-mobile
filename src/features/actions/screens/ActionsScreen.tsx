@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { FAB } from 'react-native-paper';
 
 import { RootStackParams } from '../../../App';
@@ -12,9 +12,9 @@ const ActionsScreen = ({ navigation }: Props) => {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.filtersContainer}>
+        <ScrollView bounces={false} style={styles.filtersContainer}>
           <ActionsListFilters />
-        </View>
+        </ScrollView>
         <ActionsList />
       </View>
       <FAB
@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
   },
   filtersContainer: {
     marginBottom: 20,
+    flexDirection: 'row',
+    width: '100%',
   },
   fab: {
     position: 'absolute',
